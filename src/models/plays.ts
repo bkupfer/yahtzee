@@ -56,35 +56,33 @@ function countDices(hand: DiceHand): {[dice: number]: number} {
 export class Pair extends AbsPlay {
     score(hand: DiceHand): number {
         const count = countDices(hand);
-        let score = 0;
         for (let i = 6; 1 <= i; i --) {
             if (2 <= count[i]) {
-                score = 2 * i;
-                break;
+                return 12;
             }
         }
-        return score;
+        return 0;
     }
 }
 
 export class TwoPairs extends AbsPlay {
     score(hand: DiceHand): number {
         const count = countDices(hand);
-        let firstPair = 0;
-        let secondPair = 0;
+        let firstPair = false;
+        let secondPair = false;
         for (let i = 6; 1 <= i; i --) {
             if (2 <= count[i]) {
-                if (firstPair === 0) {
-                    firstPair = i;
+                if (!firstPair) {
+                    firstPair = true;
                 }
                 else {
-                    secondPair = i;
+                    secondPair = true;
                     break;
                 }
             }
         }
-        if (firstPair !== 0 && secondPair !== 0) {
-            return 2 * firstPair + 2 * secondPair;
+        if (firstPair && secondPair) {
+            return 22;
         }
         return 0;
     }
@@ -93,14 +91,12 @@ export class TwoPairs extends AbsPlay {
 export class ThreeOfAKind extends AbsPlay {
     score(hand: DiceHand): number {
         const count = countDices(hand);
-        let score = 0;
         for (let i = 6; 1 <= i; i --) {
             if (3 <= count[i]) {
-                score = hand.dices.reduce((v, a) => v + a, 0);
-                break;
+                return 18;
             }
         }
-        return score;
+        return 0;
     }
 }
 
@@ -118,7 +114,7 @@ export class FullHouse extends AbsPlay {
             }
         }
         if (pair && triple) {
-            return 25;
+            return 28;
         }
         return 0;
     }
@@ -131,7 +127,7 @@ export class LowStraight extends AbsPlay {
                 return 0;
             }
         }
-        return 30;
+        return 15;
     }
 }
 
@@ -142,36 +138,31 @@ export class HighStraight extends AbsPlay {
                 return 0;
             }
         }
-        return 40;
+        return 20;
     }
 }
 
 export class Poker extends AbsPlay {
     score(hand: DiceHand): number {
         const count = countDices(hand);
-        let score = 0;
         for (let i = 6; 1 <= i; i --) {
             if (4 <= count[i]) {
-                score = hand.dices.reduce((v, a) => v + a, 0);
-
-                break;
+                return 24;
             }
         }
-        return score;
+        return 0;
     }
 }
 
 export class Yahtzee extends AbsPlay {
     score(hand: DiceHand): number {
         const count = countDices(hand);
-        let score = 0;
         for (let i = 6; 1 <= i; i --) {
             if (5 <= count[i]) {
-                score = 50;
-                break;
+                return 50;
             }
         }
-        return score;
+        return 0;
     }
 }
 

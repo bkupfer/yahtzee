@@ -88,7 +88,7 @@ export class UpperSection extends Section {
     }
 
     bonus(): number {
-        return 63 <= this.flatScore() ? 35 : 0;
+        return 63 <= this.flatScore() ? 50 : 0;
     }
 
     flatScore(): number {
@@ -128,7 +128,7 @@ export class LowerSection extends Section {
     }
 
     bonus(): number {
-        return 50 <= this.flatScore() ? 50 : 0;
+        return 0;
     }
 
     flatScore(): number {
