@@ -196,6 +196,16 @@ export class Yahtzee extends AbsPlay {
     }
 }
 
+export class Satan extends AbsPlay {
+    score(hand: DiceHand): number {
+        const count = countDices(hand);
+        if (3 <= count[6]) {
+            return 26;
+        }
+        return 0;
+    }
+}
+
 export class SmallMichi extends AbsPlay {
     // {2,3,4,5}
     score(hand: DiceHand): number {
