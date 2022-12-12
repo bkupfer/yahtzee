@@ -24,14 +24,19 @@ const gameStore = useGameStore();
 const randomInputs = ref<boolean>(true);
 const hand = ref<DiceHand>(new DiceHand([0, 0, 0, 0, 0]));
 const reroll = ref<number[]>([]);
+const rerollAttempts = ref<number>(0);
+
 
 function randomizeHand() {
   reroll.value = [];
   hand.value = randomHand();
+  rerollAttempts.value = 0;
 }
 
 function selectForReroll(dice: number) {
-  reroll.value.push(dice);
+  if (rerollAttempts.value < 2) {
+    reroll.value.push(dice);
+  }
 }
 
 function randomizeRerolls() {
@@ -39,6 +44,7 @@ function randomizeRerolls() {
     hand.value.dices[dice] = randomDice();
   });
   reroll.value = [];
+  rerollAttempts.value += 1;
 }
 
 function setHandToZero() {
@@ -52,14 +58,37 @@ function playHand(player: number, pattern: Patterns, hand: DiceHand): void {
   setHandToZero();
 }
 
-
-function disablePlayHand(player: number, pattern: Patterns, hand: DiceHand): boolean {
-  if (hand.dices.every((dice: number) => dice === 0)) {
-    return true;
-  }
+function playColor(player: number, pattern: Patterns, hand: DiceHand): string {
   const scoreboard: ScoreCard = gameStore.scoreboard(player);
   const play: Play = scoreboard.getPlay(pattern);
 
+  if (play.played) {
+    return 'success'
+  }
+  if (hand.dices.every((dice: number) => dice === 0)) {
+    return 'default';
+  }
+  if (play.score(hand) !== 0) {
+    return 'default';
+  }
+  if (!scoreboard.nonZeroPlayAvailable(hand)) {
+    return 'error';
+  }
+  return 'default';
+}
+
+function playedPattern(player: number, pattern: Patterns): boolean {
+  const scoreboard: ScoreCard = gameStore.scoreboard(player);
+  const play: Play = scoreboard.getPlay(pattern);
+  return play.played;
+}
+
+function disablePlayHand(player: number, pattern: Patterns, hand: DiceHand): boolean {
+  const scoreboard: ScoreCard = gameStore.scoreboard(player);
+  const play: Play = scoreboard.getPlay(pattern);
+  if (hand.dices.every((dice: number) => dice === 0)) {
+    return true;
+  }
   if (play.played) {
     return true;
   }
@@ -71,9 +100,6 @@ function disablePlayHand(player: number, pattern: Patterns, hand: DiceHand): boo
   }
   return true;
 }
-
-
-
 </script>
 
 <template>
@@ -85,7 +111,9 @@ function disablePlayHand(player: number, pattern: Patterns, hand: DiceHand): boo
     <div v-if="randomInputs">
       Random play
       <v-btn v-on:click="randomizeHand()" color="secondary">Generate hand</v-btn>
-      <v-btn v-show="reroll.length !== 0" v-on:click="randomizeRerolls()" color="secondary">Throw reroll</v-btn>
+      <v-btn v-show="reroll.length !== 0 && rerollAttempts < 3" v-on:click="randomizeRerolls()" color="secondary">
+        Throw reroll ({{ rerollAttempts + 1 }})
+      </v-btn>
       <br>
     </div>
     <div v-else>
@@ -106,18 +134,11 @@ function disablePlayHand(player: number, pattern: Patterns, hand: DiceHand): boo
     </div>
 
     <h2>Play options</h2>
-    <v-btn-group>
-      <v-btn v-for="pattern in HAND_PATTERNS.upper" :key="pattern"
+    <v-btn-group v-for="section in ['upper', 'lower']" :key="section">
+      <v-btn v-for="pattern in HAND_PATTERNS[section]" :key="pattern"
              @click="playHand(turn, pattern, hand); $emit('pass-the-dice')"
              :disabled="disablePlayHand(turn, pattern, hand)"
-      >
-        {{ pattern }}
-      </v-btn>
-    </v-btn-group>
-    <v-btn-group>
-      <v-btn v-for="pattern in HAND_PATTERNS.lower" :key="pattern"
-             @click="playHand(turn, pattern, hand); $emit('pass-the-dice')"
-             :disabled="disablePlayHand(turn, pattern, hand)"
+             :color="playColor(turn, pattern, hand)"
       >
         {{ pattern }}
       </v-btn>
