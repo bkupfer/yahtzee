@@ -4,8 +4,6 @@ import {HAND_PATTERNS} from "@/models/scoreboard";
 import {formatPattern} from "./helpers";
 
 const gameStore = useGameStore();
-
-
 </script>
 
 <template>

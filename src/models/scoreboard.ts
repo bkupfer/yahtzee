@@ -13,6 +13,7 @@ import {
 } from "@/models/plays";
 import type {DiceHand} from "@/models/hand";
 
+
 export const HAND_PATTERNS = {
     upper: ['high_card', 'pairs', 'two_pairs', 'three_of_a_kind', 'full_house', 'low_straight', 'high_straight', 'poker', 'yahtzee', 'sum_choice'],
     lower: ['aces', 'twos', 'threes', 'fours', 'fives', 'sixes'],
@@ -25,9 +26,10 @@ export type Patterns = UpperPatterns | LowerPatterns;
 
 function isUpperPattern(pattern: Patterns): boolean {
     // todo: there has to be a better way of doing this
-    const upper = ['high_card', 'pairs', 'two_pairs', 'three_of_a_kind', 'full_house', 'low_straight', 'high_straight', 'poker', 'yahtzee', 'sum_choice'];
+    const upper: string[] = ['high_card', 'pairs', 'two_pairs', 'three_of_a_kind', 'full_house', 'low_straight', 'high_straight', 'poker', 'yahtzee', 'sum_choice'];
     return upper.includes(pattern);
 }
+
 
 export class ScoreCard {
     upperSection: Section = new UpperSection();
@@ -53,7 +55,6 @@ export class ScoreCard {
 
 
 export abstract class Section {
-    // abstract getPlay(pattern: string): Play;
     abstract bonus(): number;
     abstract flatScore(): number;
     abstract existsValidPlay(hand: DiceHand): boolean;
@@ -62,7 +63,6 @@ export abstract class Section {
         return this.flatScore() + this.bonus();
     }
 }
-
 
 export class UpperSection extends Section {
     high_card: Play = new HighCard();

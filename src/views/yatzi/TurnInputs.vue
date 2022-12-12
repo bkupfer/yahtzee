@@ -5,7 +5,6 @@ import {useGameStore} from "@/stores/yatzi";
 import type {ScoreCard, UpperPatterns, LowerSection, Patterns} from "@/models/scoreboard";
 import {HAND_PATTERNS} from "@/models/scoreboard";
 import {formatPattern} from "./helpers";
-import {Player} from "@/models/player";
 import type {Play} from "@/models/plays";
 
 
@@ -20,12 +19,10 @@ const props = defineProps({
 defineEmits(['pass-the-dice'])
 
 const gameStore = useGameStore();
-
 const randomInputs = ref<boolean>(true);
 const hand = ref<DiceHand>(new DiceHand([0, 0, 0, 0, 0]));
 const reroll = ref<number[]>([]);
 const rerollAttempts = ref<number>(0);
-
 
 function randomizeHand() {
   reroll.value = [];
@@ -61,7 +58,6 @@ function playHand(player: number, pattern: Patterns, hand: DiceHand): void {
 function playColor(player: number, pattern: Patterns, hand: DiceHand): string {
   const scoreboard: ScoreCard = gameStore.scoreboard(player);
   const play: Play = scoreboard.getPlay(pattern);
-
   if (play.played) {
     return 'success'
   }
@@ -75,12 +71,6 @@ function playColor(player: number, pattern: Patterns, hand: DiceHand): string {
     return 'error';
   }
   return 'default';
-}
-
-function playedPattern(player: number, pattern: Patterns): boolean {
-  const scoreboard: ScoreCard = gameStore.scoreboard(player);
-  const play: Play = scoreboard.getPlay(pattern);
-  return play.played;
 }
 
 function disablePlayHand(player: number, pattern: Patterns, hand: DiceHand): boolean {
@@ -123,14 +113,12 @@ function disablePlayHand(player: number, pattern: Patterns, hand: DiceHand): boo
       </span>
     </div>
 
-    <div>
-      <div class="my-2">
-        <v-btn v-for="dice in 5" :key="dice"
-               @click="selectForReroll(dice - 1)"
-               :color="reroll.includes(dice - 1) ? 'secondary' : 'primary'">
-          {{ hand.dices[dice - 1] }}
-        </v-btn>
-      </div>
+    <div class="my-2">
+      <v-btn v-for="dice in 5" :key="dice"
+             @click="selectForReroll(dice - 1)"
+             :color="reroll.includes(dice - 1) ? 'secondary' : 'primary'">
+        {{ hand.dices[dice - 1] }}
+      </v-btn>
     </div>
 
     <h2>Play options</h2>
@@ -140,7 +128,7 @@ function disablePlayHand(player: number, pattern: Patterns, hand: DiceHand): boo
              :disabled="disablePlayHand(turn, pattern, hand)"
              :color="playColor(turn, pattern, hand)"
       >
-        {{ pattern }}
+        {{ formatPattern(pattern) }}
       </v-btn>
     </v-btn-group>
 
