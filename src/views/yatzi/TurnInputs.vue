@@ -2,9 +2,11 @@
 import {DiceHand, randomDice, randomHand} from "@/models/hand";
 import {ref} from "vue";
 import {useGameStore} from "@/stores/yatzi";
-import type {ScoreCard} from "@/models/scoreboard";
+import type {ScoreCard, UpperPatterns, LowerSection, Patterns} from "@/models/scoreboard";
 import {HAND_PATTERNS} from "@/models/scoreboard";
 import {formatPattern} from "./helpers";
+import {Player} from "@/models/player";
+import type {Play} from "@/models/plays";
 
 
 const props = defineProps({
@@ -39,9 +41,43 @@ function randomizeRerolls() {
   reroll.value = [];
 }
 
-function scoreboard(turn: number): ScoreCard {
-  return gameStore.scoreboard(turn);
+function setHandToZero() {
+  hand.value = new DiceHand([0, 0, 0, 0, 0]);
 }
+
+function playHand(player: number, pattern: Patterns, hand: DiceHand): void {
+  const scoreboard: ScoreCard = gameStore.scoreboard(player);
+  const play: Play = scoreboard.getPlay(pattern);
+  play.play(hand);
+  setHandToZero();
+}
+
+
+function disablePlayHand(player: number, pattern: Patterns, hand: DiceHand): boolean {
+  if (hand.dices.every((dice: number) => dice === 0)) {
+    return true;
+  }
+  const scoreboard: ScoreCard = gameStore.scoreboard(player);
+  console.log('disable looks for pattern: ' + pattern);
+  const play: Play = scoreboard.getPlay(pattern);
+  console.log(play);
+
+  if (play.played) {
+    return true;
+  } else {
+    if (play.score(hand) !== 0) {
+      return false;
+    }
+    if (!scoreboard.nonZeroPlayAvailable(hand)) {
+      return false;
+    }
+
+    return true;
+  }
+}
+
+
+
 </script>
 
 <template>
@@ -71,24 +107,22 @@ function scoreboard(turn: number): ScoreCard {
           {{ hand.dices[dice - 1] }}
         </v-btn>
       </div>
-      <code>{{ reroll }}</code>
-      <code>{{ hand }}</code>
     </div>
-
-
 
     <h2>Play options</h2>
     <v-btn-group>
       <v-btn v-for="pattern in HAND_PATTERNS.upper" :key="pattern"
-             @click="scoreboard(turn).upperSection[pattern].play(hand); $emit('pass-the-dice')"
-             :disabled="scoreboard(turn).upperSection[pattern].played || 0 === scoreboard(turn).upperSection[pattern].score(hand)">
+             @click="playHand(turn, pattern, hand); $emit('pass-the-dice')"
+             :disabled="disablePlayHand(turn, pattern, hand)"
+      >
         {{ pattern }}
       </v-btn>
     </v-btn-group>
     <v-btn-group>
       <v-btn v-for="pattern in HAND_PATTERNS.lower" :key="pattern"
-             @click="scoreboard(turn).lowerSection[pattern].play(hand); $emit('pass-the-dice')"
-             :disabled="scoreboard(turn).lowerSection[pattern].played || 0 === scoreboard(turn).lowerSection[pattern].score(hand)">
+             @click="playHand(turn, pattern, hand); $emit('pass-the-dice')"
+             :disabled="disablePlayHand(turn, pattern, hand)"
+      >
         {{ pattern }}
       </v-btn>
     </v-btn-group>

@@ -153,6 +153,7 @@ export class Poker extends AbsPlay {
         for (let i = 6; 1 <= i; i --) {
             if (4 <= count[i]) {
                 score = hand.dices.reduce((v, a) => v + a, 0);
+
                 break;
             }
         }

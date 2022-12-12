@@ -12,7 +12,7 @@ export const useGameStore = defineStore("yatzi", {
 
     getters: {
       scoreboard: (state) => {
-          return (turn: number) => state.players[turn].score;
+          return (player: number) => state.players[player].score;
       }
     },
 

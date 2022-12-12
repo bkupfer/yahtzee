@@ -11,17 +11,40 @@ import {
     TwoPairs,
     Yahtzee
 } from "@/models/plays";
+import type {DiceHand} from "@/models/hand";
 
-
-export const HAND_PATTERNS: {[section: string]: string[]} = {
+export const HAND_PATTERNS = {
     upper: ['high_card', 'pairs', 'two_pairs', 'three_of_a_kind', 'full_house', 'low_straight', 'high_straight', 'poker', 'yahtzee', 'sum_choice'],
     lower: ['aces', 'twos', 'threes', 'fours', 'fives', 'sixes'],
-};
+} as const;
 
+export type UpperPatterns = typeof HAND_PATTERNS.upper[number];
+export type LowerPatterns = typeof HAND_PATTERNS.lower[number];
+
+export type Patterns = UpperPatterns | LowerPatterns;
+
+function isUpperPattern(pattern: Patterns): boolean {
+    // todo: there has to be a better way of doing this
+    const upper = ['high_card', 'pairs', 'two_pairs', 'three_of_a_kind', 'full_house', 'low_straight', 'high_straight', 'poker', 'yahtzee', 'sum_choice'];
+    return upper.includes(pattern);
+}
 
 export class ScoreCard {
     upperSection: Section = new UpperSection();
     lowerSection: Section = new LowerSection();
+
+    getPlay(pattern: Patterns): Play {
+        if (isUpperPattern(pattern)) {
+            return (<UpperSection>this.upperSection)[<UpperPatterns>pattern];
+        }
+        else {
+            return (<LowerSection>this.lowerSection)[<LowerPatterns>pattern];
+        }
+    }
+
+    nonZeroPlayAvailable(hand: DiceHand): boolean {
+        return this.upperSection.existsValidPlay(hand) || this.lowerSection.existsValidPlay(hand);
+    }
 
     totalScore(): number {
         return this.upperSection.totalScore() + this.lowerSection.totalScore();
@@ -29,9 +52,11 @@ export class ScoreCard {
 }
 
 
-abstract class Section {
+export abstract class Section {
+    // abstract getPlay(pattern: string): Play;
     abstract bonus(): number;
     abstract flatScore(): number;
+    abstract existsValidPlay(hand: DiceHand): boolean;
 
     totalScore(): number {
         return this.flatScore() + this.bonus();
@@ -50,6 +75,17 @@ export class UpperSection extends Section {
     poker: Play = new Poker();
     yahtzee: Play = new Yahtzee();
     sum_choice: Play = new SumChoice();
+
+    existsValidPlay(hand: DiceHand): boolean {
+        let validPlay: boolean = false;
+        HAND_PATTERNS.upper.forEach((pattern: UpperPatterns) => {
+            const play: Play = this[pattern];
+            if (!play.played && play.score(hand) !== 0) {
+                validPlay = true;
+            }
+        });
+        return validPlay;
+    }
 
     bonus(): number {
         return 63 <= this.flatScore() ? 35 : 0;
@@ -79,6 +115,17 @@ export class LowerSection extends Section {
     fours: Play = new CountPlay(4);
     fives: Play = new CountPlay(5);
     sixes: Play = new CountPlay(6);
+
+    existsValidPlay(hand: DiceHand): boolean {
+        let validPlay: boolean = false;
+        HAND_PATTERNS.lower.forEach((pattern: LowerPatterns) => {
+            const play: Play = this[pattern];
+            if (!play.played && play.score(hand) !== 0) {
+                validPlay = true;
+            }
+        });
+        return validPlay;
+    }
 
     bonus(): number {
         return 50 <= this.flatScore() ? 50 : 0;
