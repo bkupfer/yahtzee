@@ -39,6 +39,12 @@ export class CountPlay extends AbsPlay {
     }
 }
 
+export class Skip extends AbsPlay {
+    score(hand: DiceHand): number {
+        return 1;
+    }
+}
+
 export class HighCard extends AbsPlay {
     score(hand: DiceHand): number {
         return Math.max(...hand.dices);
@@ -146,6 +152,7 @@ export class HighStraight extends AbsPlay {
 export class TripleOilMonkey extends AbsPlay {
     score(hand: DiceHand): number {
         const count = countDices(hand);
+        console.log(count);
         let tripleOil = true;
         let oilBonus = 0;
         for (let i = 1; i <= 6; i ++) {
@@ -155,7 +162,7 @@ export class TripleOilMonkey extends AbsPlay {
                 }
             }
             else {
-                if (count[i] !== 0 && count[i] === 1) {
+                if (2 <= count[i]) {
                     tripleOil = false;
                 }
                 oilBonus += i;
@@ -183,6 +190,54 @@ export class Yahtzee extends AbsPlay {
         for (let i = 6; 1 <= i; i --) {
             if (5 <= count[i]) {
                 return 50;
+            }
+        }
+        return 0;
+    }
+}
+
+export class SmallMichi extends AbsPlay {
+    // {2,3,4,5}
+    score(hand: DiceHand): number {
+        const count = countDices(hand);
+        if (count[1] === 0 && count[6] === 0) {
+            return 15;
+        }
+        return 0;
+    }
+}
+export class BigMichi extends AbsPlay {
+    // {1, 6}
+    score(hand: DiceHand): number {
+        const count = countDices(hand);
+        if (count[2] === 0 && count[3] === 0 && count[4] === 0 && count[5] === 0) {
+            return 15;
+        }
+        return 0;
+    }
+}
+
+export class FourFingers extends AbsPlay {
+    // 4 * {n} + 1
+    score(hand: DiceHand): number {
+        const count = countDices(hand);
+        if (count[1] === 1) {
+            for (let n = 2; n <= 6; n ++) {
+                if (count[n] === 4) {
+                    return 19;
+                }
+            }
+        }
+        return 0;
+    }
+}
+
+export class FakeYahtzee extends AbsPlay {
+    score(hand: DiceHand): number {
+        const count = countDices(hand);
+        for (let i = 1; i <= 6; i ++) {
+            if (count[i] + count[1] === 5) {
+                return 35;
             }
         }
         return 0;
