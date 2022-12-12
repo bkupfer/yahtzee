@@ -58,22 +58,18 @@ function disablePlayHand(player: number, pattern: Patterns, hand: DiceHand): boo
     return true;
   }
   const scoreboard: ScoreCard = gameStore.scoreboard(player);
-  console.log('disable looks for pattern: ' + pattern);
   const play: Play = scoreboard.getPlay(pattern);
-  console.log(play);
 
   if (play.played) {
     return true;
-  } else {
-    if (play.score(hand) !== 0) {
-      return false;
-    }
-    if (!scoreboard.nonZeroPlayAvailable(hand)) {
-      return false;
-    }
-
-    return true;
   }
+  if (play.score(hand) !== 0) {
+    return false;
+  }
+  if (!scoreboard.nonZeroPlayAvailable(hand)) {
+    return false;
+  }
+  return true;
 }
 
 
