@@ -7,7 +7,7 @@ import {
     LowStraight,
     Pair,
     Poker, SumChoice,
-    ThreeOfAKind,
+    ThreeOfAKind, TripleOilMonkey,
     TwoPairs,
     Yahtzee
 } from "@/models/plays";
@@ -15,8 +15,8 @@ import type {DiceHand} from "@/models/hand";
 
 
 export const HAND_PATTERNS = {
-    upper: ['high_card', 'pairs', 'two_pairs', 'three_of_a_kind', 'full_house', 'low_straight', 'high_straight', 'poker', 'yahtzee', 'sum_choice'],
-    lower: ['aces', 'twos', 'threes', 'fours', 'fives', 'sixes'],
+    upper: ['high_card', 'pairs', 'two_pairs', 'three_of_a_kind', 'full_house', 'low_straight', 'high_straight', 'triple_oil_monkey', 'poker', 'yahtzee',],
+    lower: ['aces', 'twos', 'threes', 'fours', 'fives', 'sixes', 'sum_choice'],
 } as const;
 
 export type UpperPatterns = typeof HAND_PATTERNS.upper[number];
@@ -26,7 +26,7 @@ export type Patterns = UpperPatterns | LowerPatterns;
 
 function isUpperPattern(pattern: Patterns): boolean {
     // todo: there has to be a better way of doing this
-    const upper: string[] = ['high_card', 'pairs', 'two_pairs', 'three_of_a_kind', 'full_house', 'low_straight', 'high_straight', 'poker', 'yahtzee', 'sum_choice'];
+    const upper: string[] = ['high_card', 'pairs', 'two_pairs', 'three_of_a_kind', 'full_house', 'low_straight', 'high_straight', 'triple_oil_monkey', 'poker', 'yahtzee'];
     return upper.includes(pattern);
 }
 
@@ -72,9 +72,9 @@ export class UpperSection extends Section {
     full_house: Play = new FullHouse();
     low_straight: Play = new LowStraight();
     high_straight: Play = new HighStraight();
+    triple_oil_monkey: Play = new TripleOilMonkey();
     poker: Play = new Poker();
     yahtzee: Play = new Yahtzee();
-    sum_choice: Play = new SumChoice();
 
     existsValidPlay(hand: DiceHand): boolean {
         let validPlay: boolean = false;
@@ -100,9 +100,9 @@ export class UpperSection extends Section {
         total_points += this.full_house.points;
         total_points += this.low_straight.points;
         total_points += this.high_straight.points;
+        total_points += this.triple_oil_monkey.points;
         total_points += this.poker.points;
         total_points += this.yahtzee.points;
-        total_points += this.sum_choice.points;
         return total_points;
     }
 }
@@ -115,6 +115,7 @@ export class LowerSection extends Section {
     fours: Play = new CountPlay(4);
     fives: Play = new CountPlay(5);
     sixes: Play = new CountPlay(6);
+    sum_choice: Play = new SumChoice();
 
     existsValidPlay(hand: DiceHand): boolean {
         let validPlay: boolean = false;
@@ -128,7 +129,7 @@ export class LowerSection extends Section {
     }
 
     bonus(): number {
-        return 0;
+        return 63 <= this.flatScore() ? 35 : 0;
     }
 
     flatScore(): number {
@@ -139,6 +140,7 @@ export class LowerSection extends Section {
         total_points += this.fours.points;
         total_points += this.fives.points;
         total_points += this.sixes.points;
+        total_points += this.sum_choice.points;
         return total_points;
     }
 }

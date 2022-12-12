@@ -142,6 +142,29 @@ export class HighStraight extends AbsPlay {
     }
 }
 
+
+export class TripleOilMonkey extends AbsPlay {
+    score(hand: DiceHand): number {
+        const count = countDices(hand);
+        let tripleOil = true;
+        let oilBonus = 0;
+        for (let i = 1; i <= 6; i ++) {
+            if (i === 3) {
+                if (count[i] !== 3) {
+                    tripleOil = false;
+                }
+            }
+            else {
+                if (count[i] !== 0 && count[i] === 1) {
+                    tripleOil = false;
+                }
+                oilBonus += i;
+            }
+        }
+        return tripleOil ? 18 + oilBonus : 0;
+    }
+}
+
 export class Poker extends AbsPlay {
     score(hand: DiceHand): number {
         const count = countDices(hand);
