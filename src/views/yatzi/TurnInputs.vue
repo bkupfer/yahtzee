@@ -2,7 +2,7 @@
 import {DiceHand, randomDice, randomHand} from "@/models/hand";
 import {ref} from "vue";
 import {useGameStore} from "@/stores/yatzi";
-import type {ScoreCard, UpperPatterns, LowerSection, Patterns} from "@/models/scoreboard";
+import type {ScoreCard, Patterns} from "@/models/scoreboard";
 import {HAND_PATTERNS} from "@/models/scoreboard";
 import {formatPattern} from "./helpers";
 import type {Play} from "@/models/plays";
@@ -107,9 +107,8 @@ function disablePlayHand(player: number, pattern: Patterns, hand: DiceHand): boo
 </script>
 
 <template>
-  <v-row>
-    <v-col cols="12">
-
+  <v-container>
+    <v-row>
       <v-col cols="12">
         <h2>Turn {{ round }} - <span :color="playerColor(turn)" style="font-weight: bold">{{ formatPattern(gameStore.players[turn].id) }}</span></h2>
         <br>
@@ -133,8 +132,8 @@ function disablePlayHand(player: number, pattern: Patterns, hand: DiceHand): boo
         </div>
       </v-col>
 
-      <v-col cols="6">
-        <div class="my-2">
+      <v-col cols="12">
+        <v-btn-group class="my-2">
           <v-btn v-for="dice in 5" :key="dice"
                  @click="selectForReroll(dice - 1)"
                  :color="reroll.includes(dice - 1) ? 'secondary' : 'primary'"
@@ -142,12 +141,14 @@ function disablePlayHand(player: number, pattern: Patterns, hand: DiceHand): boo
           >
             {{ hand.dices[dice - 1] }}
           </v-btn>
-        </div>
+        </v-btn-group>
       </v-col>
 
-      <v-col cols="12">
+      <v-row>
+        <v-col cols="12">
         <h2>Play options</h2>
-        <v-btn-group v-for="section in ['upper', 'lower']" :key="section" >
+        </v-col>
+        <v-col cols="12" v-for="section in ['upper', 'lower']" :key="section" >
           <v-btn v-for="pattern in HAND_PATTERNS[section]" :key="pattern" min-width="50px" class="ma-1 rounded-b-shaped"
                  @click="playHand(turn, pattern, hand); $emit('pass-the-dice')"
                  :disabled="disablePlayHand(turn, pattern, hand)"
@@ -156,11 +157,11 @@ function disablePlayHand(player: number, pattern: Patterns, hand: DiceHand): boo
             {{ formatPattern(pattern) }}
             <sub v-if="notYetPlayed(turn, pattern)">{{ potentialPoints(turn, pattern, hand) }}</sub>
           </v-btn>
-        </v-btn-group>
-      </v-col>
-    </v-col>
+        </v-col>
+      </v-row>
+    </v-row>
 
-  </v-row>
+  </v-container>
 </template>
 
 <style scoped>

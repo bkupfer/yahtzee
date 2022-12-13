@@ -88,7 +88,7 @@ export class TwoPairs extends AbsPlay {
             }
         }
         if (firstPair && secondPair) {
-            return 22;
+            return 16;
         }
         return 0;
     }
@@ -169,7 +169,6 @@ export class TripleOilMonkey extends AbsPlay {
                 }
             }
         }
-        console.log('oil bonus', oilBonus);
         return tripleOil ? 18 + 2 * oilBonus : 0;
     }
 }
@@ -229,7 +228,7 @@ export class Bowser extends AbsPlay {
 export class SmallMichi extends AbsPlay {
     score(hand: DiceHand): number {
         const count = countDices(hand);
-        if (count[1] === 0 && count[6] === 0) {
+        if (count[1] + count[6] === 5) {
             return 15;
         }
         return 0;
@@ -238,7 +237,7 @@ export class SmallMichi extends AbsPlay {
 export class PowerMichi extends AbsPlay {
     score(hand: DiceHand): number {
         const count = countDices(hand);
-        if (count[2] === 0 && count[3] === 0 && count[4] === 0 && count[5] === 0) {
+        if (count[2] + count[3] + count[4] + count[5] === 5) {
             return 25;
         }
         return 0;
@@ -290,5 +289,46 @@ export class OceanBlue extends AbsPlay {
 export class SumChoice extends AbsPlay {
     score(hand: DiceHand): number {
         return hand.dices.reduce((value, aggregator) => value + aggregator);
+    }
+}
+
+export class HeavenlyGrace extends AbsPlay {
+    score(hand: DiceHand): number {
+        const count = countDices(hand);
+        if (count[4] + count[5] + count[6] === 5) {
+            return 15;
+        }
+        return 0;
+    }
+}
+
+export class Pichanga extends AbsPlay {
+    score(hand: DiceHand): number {
+        const count = countDices(hand);
+        let zeroesCount = 0;
+        for (let i = 1; i <= 6; i ++) {
+            if (count[i] === 0) {
+                zeroesCount += 1;
+            }
+        }
+        return zeroesCount === 1 ? 10 : 0;
+    }
+}
+
+export class Twins extends AbsPlay {
+    score(hand: DiceHand): number {
+        const count = countDices(hand);
+        for (let twin = 1; twin <= 6; twin ++) {
+            if (2 <= count[twin]) {
+                let nextTwin = twin + 1;
+                if (nextTwin === 7) {
+                    nextTwin = 1;
+                }
+                if (2 <= count[nextTwin]) {
+                    return 18;
+                }
+            }
+        }
+        return 0;
     }
 }

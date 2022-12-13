@@ -18,13 +18,13 @@ const addPlayer = (name: string) => {
 
 <template>
   <v-container>
-    <h2>Register player</h2>
+    <h2 class="mb-4">Register player</h2>
     <input v-model="playerNameInput" type="text" placeholder="Player name">
     <v-btn v-on:click="addPlayer(playerNameInput)" color="primary">
       Add player
     </v-btn>
     <br>
-    <div v-if="gameStore.players.length">
+    <div v-if="gameStore.players.length" class="mt-6">
       <h3>Players:</h3>
       <ol>
         <li v-for="player in gameStore.players" v-bind:key="player.id">{{ player.id }}</li>

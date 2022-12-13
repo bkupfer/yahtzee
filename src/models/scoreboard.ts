@@ -2,13 +2,13 @@ import type {Play} from "@/models/plays";
 import {
     Bowser,
     CountPlay, FakeYahtzee, FourTowers,
-    FullHouse,
+    FullHouse, HeavenlyGrace,
     HighCard,
     HighStraight,
     LowStraight, OceanBlue,
-    Pair,
+    Pair, Pichanga,
     Poker, PowerMichi, Satan, Skip, SmallMichi, SumChoice,
-    ThreeOfAKind, TripleOilMonkey,
+    ThreeOfAKind, TripleOilMonkey, Twins,
     TwoPairs,
     Yahtzee
 } from "@/models/plays";
@@ -17,7 +17,7 @@ import type {DiceHand} from "@/models/hand";
 
 export const HAND_PATTERNS = {
     upper: ['bowser', 'big_bowser', 'skip', 'high_card', 'pairs', 'two_pairs', 'three_of_a_kind', 'full_house', 'low_straight', 'high_straight', 'poker', 'yahtzee', 'satan'],
-    lower: ['aces', 'twos', 'threes', 'fours', 'fives', 'sixes', 'sum_choice', 'small_michi', 'ocean_blue', 'power_michi', 'triple_oil_monkey', 'fake_yahtzee', 'four_towers'],
+    lower: ['aces', 'twos', 'threes', 'fours', 'fives', 'sixes', 'pichanga', 'sum_choice', 'twins', 'small_michi', 'heavenly_grace', 'ocean_blue', 'power_michi', 'triple_oil_monkey', 'fake_yahtzee', 'four_towers'],
 } as const;
 
 export type UpperPatterns = typeof HAND_PATTERNS.upper[number];
@@ -121,12 +121,15 @@ export class LowerSection extends Section {
     fours: Play = new CountPlay(4);
     fives: Play = new CountPlay(5);
     sixes: Play = new CountPlay(6);
+    pichanga: Play = new Pichanga();
     sum_choice: Play = new SumChoice();
     small_michi: Play = new SmallMichi();
     power_michi: Play = new PowerMichi();
     four_towers: Play = new FourTowers();
     triple_oil_monkey: Play = new TripleOilMonkey();
     ocean_blue: Play = new OceanBlue();
+    heavenly_grace: Play = new HeavenlyGrace();
+    twins: Play = new Twins();
     fake_yahtzee: Play = new FakeYahtzee();
 
     existsValidPlay(hand: DiceHand): boolean {
@@ -152,9 +155,12 @@ export class LowerSection extends Section {
         total_points += this.fours.points;
         total_points += this.fives.points;
         total_points += this.sixes.points;
+        total_points += this.pichanga.points;
         total_points += this.sum_choice.points;
         total_points += this.small_michi.points;
         total_points += this.power_michi.points;
+        total_points += this.heavenly_grace.points;
+        total_points += this.twins.points;
         total_points += this.four_towers.points;
         total_points += this.triple_oil_monkey.points;
         total_points += this.ocean_blue.points;
