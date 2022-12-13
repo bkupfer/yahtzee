@@ -8,7 +8,7 @@ import {
     LowStraight, OceanBlue,
     Pair, Pichanga,
     Poker, PowerMichi, Satan, Skip, SmallMichi, SumChoice,
-    ThreeOfAKind, TripleOilMonkey, Twins,
+    ThreeOfAKind, Trader, TripleOilMonkey, Twins,
     TwoPairs,
     Yahtzee
 } from "@/models/plays";
@@ -190,12 +190,14 @@ export class SpecialSection extends Section {
 }
 
 export class EvilSection extends Section {
-    bowser: Play = new Bowser(1);
-    big_bowser: Play = new Bowser(3);
     skip: Play = new Skip();
+    koopa: Play = new Bowser(1);
+    bowser: Play = new Bowser(2);
+    trader: Play = new Trader();
+    big_bowser: Play = new Bowser(3);
 
     bonus(): number {
-        return this.flatScore() === 1 ? -50 : 0;
+        return 0;
     }
 
     existsValidPlay(hand: DiceHand): boolean {
@@ -211,9 +213,11 @@ export class EvilSection extends Section {
 
     flatScore(): number {
         let totalScore = 0;
+        totalScore += this.koopa.points;
         totalScore += this.bowser.points;
         totalScore += this.big_bowser.points;
         totalScore += this.skip.points;
+        totalScore += this.trader.points;
         return totalScore;
     }
 }

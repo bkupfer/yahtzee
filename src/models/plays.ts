@@ -225,6 +225,17 @@ export class Bowser extends AbsPlay {
     }
 }
 
+export class Trader extends AbsPlay {
+    score(hand: DiceHand): number {
+        return hand.dices.reduce((agg, dice) => {
+            if (3 <= dice) {
+                return agg - dice;
+            }
+            return agg + dice;
+        }, 0);
+    }
+}
+
 export class SmallMichi extends AbsPlay {
     score(hand: DiceHand): number {
         const count = countDices(hand);
