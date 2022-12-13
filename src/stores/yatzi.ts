@@ -1,6 +1,7 @@
 import {defineStore} from "pinia";
 import {ref} from "vue";
 import {Player} from "@/models/player";
+import {HAND_PATTERNS} from "@/models/scoreboard";
 
 export const useGameStore = defineStore("yatzi", {
 
@@ -13,7 +14,12 @@ export const useGameStore = defineStore("yatzi", {
     getters: {
       scoreboard: (state) => {
           return (player: number) => state.players[player].score;
-      }
+      },
+      totalNumberOfRounds: (state) => {
+          return () => {
+              return HAND_PATTERNS.upper.length + HAND_PATTERNS.lower.length;
+          }
+      },
     },
 
     actions: {

@@ -24,11 +24,11 @@ const randomInputs = ref<boolean>(true);
 const hand = ref<DiceHand>(new DiceHand([0, 0, 0, 0, 0]));
 const reroll = ref<number[]>([]);
 const rerollAttempts = ref<number>(0);
+const totalNumberOfRounds = gameStore.totalNumberOfRounds();
 
 function randomizeHand() {
   reroll.value = [];
   hand.value = randomHand();
-  rerollAttempts.value = 0;
 }
 
 function selectForReroll(dice: number) {
@@ -55,6 +55,7 @@ function playHand(player: number, pattern: Patterns, hand: DiceHand): void {
   play.play(hand);
   setHandToZero();
   reroll.value = [];
+  rerollAttempts.value = 0;
 }
 
 function playColor(player: number, pattern: Patterns, hand: DiceHand): string {
@@ -110,15 +111,15 @@ function disablePlayHand(player: number, pattern: Patterns, hand: DiceHand): boo
   <v-container>
     <v-row>
       <v-col cols="6">
-        <h2>Turn {{ round }} - <span :color="playerColor(turn)" style="font-weight: bold">{{ formatPattern(gameStore.players[turn].id) }}</span></h2>
+        <h2>Turn {{ round }} / {{ totalNumberOfRounds }} - <span :color="playerColor(turn)" style="font-weight: bold">{{ formatPattern(gameStore.players[turn].id) }}</span></h2>
         <span v-if="randomInputs">Random</span>
         <span v-else>Manual</span>
         play:
         <input type="checkbox" id="checkbox" v-model="randomInputs" />
         <div v-if="randomInputs">
           <v-btn v-on:click="randomizeHand()" color="secondary" class="mr-1">Generate hand</v-btn>
-          <v-btn v-show="reroll.length !== 0 && rerollAttempts < 3" v-on:click="randomizeRerolls()" color="secondary">
-            Throw reroll ({{ rerollAttempts + 1 }})
+          <v-btn :disabled="reroll.length === 0 || rerollAttempts === 2" v-on:click="randomizeRerolls()" color="secondary">
+            Throw reroll ({{ rerollAttempts }}/2)
           </v-btn>
           <br>
         </div>
