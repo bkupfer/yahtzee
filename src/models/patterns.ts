@@ -9,11 +9,12 @@ export const HAND_PATTERNS = {
         'aces', 'twos', 'threes', 'fours', 'fives', 'sixes', 'sum_choice',
     ],
     special: [
-        'high_card', 'casino', 'twins', 'small_michi', 'heavenly_grace', 'ocean_blue',
-        'power_michi', 'triple_oil_monkey', 'fake_yahtzee', 'four_towers', 'four_stars', 'satan',
+        'high_card', 'small_michi', 'twins', 'casino', 'heavenly_grace', 'triple_oil_monkey',
+        'fake_yahtzee', 'ocean_blue', 'power_michi',
+        'four_towers', 'four_stars', 'satan',
     ],
     evil: [
-        'skip', 'lowest_card', 'koopa', 'bowser', 'big_bowser', 'trader', 'reaper', 'bomb',
+        'skip', 'lowest_card', 'koopa', 'bowser', 'big_bowser', 'reaper', 'trader', 'bomb',
     ],
 } as const;
 

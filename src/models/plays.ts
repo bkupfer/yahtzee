@@ -151,7 +151,6 @@ export class HighStraight extends AbsPlay {
     }
 }
 
-
 export class TripleOilMonkey extends AbsPlay {
     score(hand: DiceHand): number {
         const count = countDices(hand);
