@@ -206,6 +206,12 @@ export class Satan extends AbsPlay {
     }
 }
 
+export class Bowser extends AbsPlay {
+    score(hand: DiceHand): number {
+        return -hand.dices.reduce((dice, sum) => dice + sum, 0);
+    }
+}
+
 export class SmallMichi extends AbsPlay {
     // {2,3,4,5}
     score(hand: DiceHand): number {
