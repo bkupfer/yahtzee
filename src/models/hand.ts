@@ -8,6 +8,10 @@ export class DiceHand {
     played(): boolean {
         return this.dices.every((dice: number) => dice !== 0);
     }
+
+    sum(): number {
+        return this.dices.reduce((sum, dice) => sum + dice, 0);
+    }
 }
 
 export function randomDice(): number {

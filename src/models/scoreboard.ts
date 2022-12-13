@@ -1,7 +1,7 @@
-import type { DiceHand } from "@/models/hand";
-import type { EvilPatterns, LowerPatterns, Patterns, SpecialPatterns, UpperPatterns } from "@/models/patterns";
-import { HAND_PATTERNS, PatternGuard } from "@/models/patterns";
-import type { Play } from "@/models/plays";
+import type { DiceHand } from "../models/hand";
+import type { EvilPatterns, LowerPatterns, Patterns, SpecialPatterns, UpperPatterns } from "../models/patterns";
+import { HAND_PATTERNS, PatternGuard } from "../models/patterns";
+import type { Play } from "../models/plays";
 import {
     Bomb,
     Bowser,
@@ -31,7 +31,7 @@ import {
     Twins,
     TwoPairs,
     Yahtzee
-} from "@/models/plays";
+} from "../models/plays";
 
 
 export class ScoreCard {

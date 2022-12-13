@@ -7,8 +7,8 @@ import {ScoreCard} from "../models/scoreboard";
 // @ts-ignore
 import * as fs from 'fs';
 
-
-const ITERATIONS: number = 1000000;
+const fileName: string = './src/analytics/results/yahtzee_stats.csv';
+const ITERATIONS: number = 2 * 10 ** 8;
 const RETHROWS: number = 3;
 
 class Stats {
@@ -48,8 +48,11 @@ class Stats {
 
 }
 
-function analyze(name: string, play: Play): Stats {
+function analyze(name: string, play: Play, verbose: boolean): Stats {
     const stats = new Stats(name);
+    if (verbose) {
+        console.log('analyzing ' + name + '...');
+    }
     for (let i = 0; i < ITERATIONS; i ++) {
         let bestScore = -ITERATIONS;
         for (let throws = 0; throws < RETHROWS; throws += 1) {
@@ -67,15 +70,16 @@ function analyze(name: string, play: Play): Stats {
 function gatherPlaysAnalytics(verbose: boolean): {[section: string]: Stats[]} {
     if (verbose) {
         console.log('-- Analytics --');
-        console.log(':: # iterations: ' + ITERATIONS);
-        console.log(':: # rethrows:   ' + RETHROWS);
+        console.log(':: # file name: ', fileName)
+        console.log(':: # iterations: ', ITERATIONS);
+        console.log(':: # rethrows:   ', RETHROWS);
     }
     const sectionStats: {[section: string]: Stats[]} = {};
     for (const section of SECTION_PATTERN) {
         const stats: Stats[] = [];
         for (const pattern of HAND_PATTERNS[<SectionPatterns>section]) {
             const scoreboard = new ScoreCard();
-            const analysis = analyze(pattern, scoreboard.getPlay(pattern));
+            const analysis = analyze(pattern, scoreboard.getPlay(pattern), verbose);
             stats.push(analysis);
         }
         stats.sort((a: Stats, b: Stats): number => {
@@ -129,5 +133,4 @@ function exportStatsCsv(filename: string, stats: {[section: string]: Stats[]}, v
 }
 
 const stats = gatherPlaysAnalytics(true);
-const fileName = './src/analytics/results/yahtzee_stats.csv';
 exportStatsCsv(fileName, stats, false);

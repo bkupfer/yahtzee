@@ -1,4 +1,4 @@
-import type { DiceHand } from "@/models/hand";
+import type { DiceHand } from "../models/hand";
 
 
 export interface Play {
@@ -123,7 +123,7 @@ export class FullHouse extends AbsPlay {
             }
         }
         if (pair && triple) {
-            return 28;
+            return 24;
         }
         return 0;
     }
@@ -136,7 +136,7 @@ export class LowStraight extends AbsPlay {
                 return 0;
             }
         }
-        return 15;
+        return 20;
     }
 }
 
@@ -147,7 +147,7 @@ export class HighStraight extends AbsPlay {
                 return 0;
             }
         }
-        return 20;
+        return 30;
     }
 }
 
@@ -180,7 +180,7 @@ export class Poker extends AbsPlay {
         const count = countDices(hand);
         for (let i = 6; 1 <= i; i --) {
             if (4 <= count[i]) {
-                return 24;
+                return 28;
             }
         }
         return 0;
@@ -242,7 +242,7 @@ export class SmallMichi extends AbsPlay {
     score(hand: DiceHand): number {
         const count = countDices(hand);
         if (count[2] + count[3] + count[4] + count[5] === 5) {
-            return 15;
+            return 13;
         }
         return 0;
     }
@@ -252,7 +252,7 @@ export class PowerMichi extends AbsPlay {
     score(hand: DiceHand): number {
         const count = countDices(hand);
         if (count[1] + count[6] === 5) {
-            return 25;
+            return 30;
         }
         return 0;
     }
@@ -264,9 +264,19 @@ export class FourTowers extends AbsPlay {
         if (count[1] === 1) {
             for (let n = 2; n <= 6; n ++) {
                 if (count[n] === 4) {
-                    return 38;
+                    return 40;
                 }
             }
+        }
+        return 0;
+    }
+}
+
+export class FourStars extends AbsPlay {
+    score(hand: DiceHand): number {
+        const count = countDices(hand);
+        if (count[1] === 4) {
+            return 40;
         }
         return 0;
     }
@@ -277,33 +287,33 @@ export class FakeYahtzee extends AbsPlay {
         const count = countDices(hand);
         for (let i = 1; i <= 6; i ++) {
             if (count[i] + count[1] === 5) {
-                return 35;
+                return 30;
+            }
+        }
+        return 0;
+    }
+}
+export class OceanBlue extends AbsPlay {
+    score(hand: DiceHand): number {
+        const count = countDices(hand);
+        if (count[3] === 1) {
+            let noHighDice = true;
+            for (let i = 4; i <= 6; i ++) {
+                if (count[i] !== 0) {
+                    noHighDice = false;
+                }
+            }
+            if (noHighDice) {
+                return 20 + count[1];
             }
         }
         return 0;
     }
 }
 
-export class OceanBlue extends AbsPlay {
-    score(hand: DiceHand): number {
-        const count = countDices(hand);
-        if (count[3] === 1) {
-            let all_zero = true;
-            for (let i = 4; i <= 6; i ++) {
-                if (count[i] !== 0) {
-                    all_zero = false;
-                }
-            }
-            if (all_zero) {
-                return 20;
-            }
-        }
-        return 0;
-    }
-}
 export class SumChoice extends AbsPlay {
     score(hand: DiceHand): number {
-        return hand.dices.reduce((value, aggregator) => value + aggregator);
+        return hand.sum();
     }
 }
 
@@ -311,7 +321,7 @@ export class HeavenlyGrace extends AbsPlay {
     score(hand: DiceHand): number {
         const count = countDices(hand);
         if (count[1] + count[5] + count[6] === 5) {
-            return 15;
+            return 20;
         }
         return 0;
     }
@@ -326,7 +336,7 @@ export class Casino extends AbsPlay {
                 zeroesCount += 1;
             }
         }
-        return zeroesCount === 1 ? 10 : 0;
+        return zeroesCount === 1 ? hand.sum() : 0;
     }
 }
 
@@ -377,16 +387,6 @@ export class Bomb extends AbsPlay {
                 return 0;
             }
             return -20;
-        }
-        return 0;
-    }
-}
-
-export class FourStars extends AbsPlay {
-    score(hand: DiceHand): number {
-        const count = countDices(hand);
-        if (count[1] === 4) {
-            return 40;
         }
         return 0;
     }
