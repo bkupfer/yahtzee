@@ -28,8 +28,10 @@ function passTheDices() {
 </script>
 
 <template>
-  <div>
-    <h1>Yatzy!</h1>
+  <v-container>
+    <v-row>
+      <h1 class="pa-4">Yatzy!</h1>
+    </v-row>
     <v-row>
       <v-cols cols="12">
         <v-row v-if="round === 0">
@@ -50,5 +52,5 @@ function passTheDices() {
         </v-row>
       </v-cols>
     </v-row>
-  </div>
+  </v-container>
 </template>

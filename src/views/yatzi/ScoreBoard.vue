@@ -7,11 +7,11 @@ const gameStore = useGameStore();
 </script>
 
 <template>
-  <div>
+  <v-container >
     <h2>Scoreboard</h2>
     <div v-for="player in gameStore.players" :key="player.id">
     </div>
-    <v-table hover>
+    <v-table hover >
       <thead>
       <tr>
         <th />
@@ -87,7 +87,7 @@ const gameStore = useGameStore();
       </tr>
       </tbody>
     </v-table>
-  </div>
+  </v-container>
 </template>
 
 <style scoped>

@@ -111,13 +111,13 @@ function disablePlayHand(player: number, pattern: Patterns, hand: DiceHand): boo
       <v-col cols="12">
         <h2>Turn {{ round }} - {{ formatPattern(gameStore.players[turn].id) }}</h2>
         <span v-if="randomInputs">Random</span>
-        <span v-else="randomInputs">Manual</span>
+        <span v-else>Manual</span>
         play:
         <input type="checkbox" id="checkbox" v-model="randomInputs" />
       </v-col>
       <v-col cols="12">
         <div v-if="randomInputs">
-          <v-btn v-on:click="randomizeHand()" color="secondary">Generate hand</v-btn>
+          <v-btn v-on:click="randomizeHand()" color="secondary" class="mx-1">Generate hand</v-btn>
           <v-btn v-show="reroll.length !== 0 && rerollAttempts < 3" v-on:click="randomizeRerolls()" color="secondary">
             Throw reroll ({{ rerollAttempts + 1 }})
           </v-btn>
