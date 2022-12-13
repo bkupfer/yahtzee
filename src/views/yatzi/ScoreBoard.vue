@@ -28,7 +28,6 @@ const gameStore = useGameStore();
           {{ player.score.totalScore() }}
         </td>
       </tr>
-<!--      <hr>-->
       <!-- upper section -->
       <tr v-for="pattern in HAND_PATTERNS.upper" :key="pattern">
         <th>{{ formatPattern(pattern) }}</th>
@@ -38,7 +37,6 @@ const gameStore = useGameStore();
           </span>
         </td>
       </tr>
-<!--      <hr>-->
       <tr>
         <th class="section_score">Section Score</th>
         <td v-for="player in gameStore.players" :key="player.id" class="section_score">
@@ -54,7 +52,6 @@ const gameStore = useGameStore();
         </td>
       </tr>
       <!-- lower section -->
-<!--      <hr>-->
       <tr v-for="pattern in HAND_PATTERNS.lower" :key="pattern">
         <th>{{ formatPattern(pattern) }}</th>
         <td v-for="player in gameStore.players" :key="player.id">
@@ -63,7 +60,6 @@ const gameStore = useGameStore();
           </span>
         </td>
       </tr>
-<!--      <hr>-->
       <tr>
         <th class="section_score">Section Score</th>
         <td v-for="player in gameStore.players" :key="player.id" class="section_score">
@@ -78,7 +74,7 @@ const gameStore = useGameStore();
           </span>
         </td>
       </tr>
-<!--      <hr>-->
+      <!-- score -->
       <tr>
         <th class="total_score">Total Score</th>
         <td v-for="player in gameStore.players" :key="player.id" class="total_score">
