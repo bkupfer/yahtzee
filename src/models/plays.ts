@@ -1,4 +1,4 @@
-import type {DiceHand} from "@/models/hand";
+import type { DiceHand } from "@/models/hand";
 
 
 export interface Play {

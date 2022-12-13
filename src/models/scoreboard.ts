@@ -1,21 +1,37 @@
-import type {Play} from "../models/plays";
+import type { DiceHand } from "@/models/hand";
+import type { EvilPatterns, LowerPatterns, Patterns, SpecialPatterns, UpperPatterns } from "@/models/patterns";
+import { HAND_PATTERNS, PatternGuard } from "@/models/patterns";
+import type { Play } from "@/models/plays";
 import {
     Bomb,
-    Bowser, Casino,
-    CountPlay, FakeYahtzee, FourStars, FourTowers,
-    FullHouse, HeavenlyGrace,
+    Bowser,
+    Casino,
+    CountPlay,
+    FakeYahtzee,
+    FourStars,
+    FourTowers,
+    FullHouse,
+    HeavenlyGrace,
     HighCard,
-    HighStraight, LowestCard,
-    LowStraight, OceanBlue,
+    HighStraight,
+    LowestCard,
+    LowStraight,
+    OceanBlue,
     Pair,
-    Poker, PowerMichi, Reaper, Satan, Skip, SmallMichi, SumChoice,
-    ThreeOfAKind, Trader, TripleOilMonkey, Twins,
+    Poker,
+    PowerMichi,
+    Reaper,
+    Satan,
+    Skip,
+    SmallMichi,
+    SumChoice,
+    ThreeOfAKind,
+    Trader,
+    TripleOilMonkey,
+    Twins,
     TwoPairs,
     Yahtzee
-} from "../models/plays";
-import type {DiceHand} from "../models/hand";
-import type {EvilPatterns, LowerPatterns, Patterns, SpecialPatterns, UpperPatterns} from "../models/patterns";
-import {HAND_PATTERNS, PatternGuard} from "../models/patterns";
+} from "@/models/plays";
 
 
 export class ScoreCard {

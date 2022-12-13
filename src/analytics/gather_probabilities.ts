@@ -1,8 +1,10 @@
 import type {Play} from "../models/plays";
 import {randomHand} from "../models/hand";
-import {HAND_PATTERNS, SECTION_PATTERN} from "../models/patterns";
 import type {SectionPatterns} from "../models/patterns";
+import {HAND_PATTERNS, SECTION_PATTERN} from "../models/patterns";
 import {ScoreCard} from "../models/scoreboard";
+
+// @ts-ignore
 import * as fs from 'fs';
 
 

@@ -1,4 +1,4 @@
-import {ScoreCard} from "@/models/scoreboard";
+import { ScoreCard } from "@/models/scoreboard";
 
 
 export class Player {
