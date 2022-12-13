@@ -109,15 +109,12 @@ function disablePlayHand(player: number, pattern: Patterns, hand: DiceHand): boo
 <template>
   <v-container>
     <v-row>
-      <v-col cols="12">
+      <v-col cols="6">
         <h2>Turn {{ round }} - <span :color="playerColor(turn)" style="font-weight: bold">{{ formatPattern(gameStore.players[turn].id) }}</span></h2>
-        <br>
         <span v-if="randomInputs">Random</span>
         <span v-else>Manual</span>
         play:
         <input type="checkbox" id="checkbox" v-model="randomInputs" />
-      </v-col>
-      <v-col cols="12">
         <div v-if="randomInputs">
           <v-btn v-on:click="randomizeHand()" color="secondary" class="mr-1">Generate hand</v-btn>
           <v-btn v-show="reroll.length !== 0 && rerollAttempts < 3" v-on:click="randomizeRerolls()" color="secondary">
@@ -130,9 +127,6 @@ function disablePlayHand(player: number, pattern: Patterns, hand: DiceHand): boo
             <input v-model="hand.dices[n - 1]" type="number" :placeholder="'dice ' + n" min="1" max="6">
           </span>
         </div>
-      </v-col>
-
-      <v-col cols="12">
         <v-btn-group class="my-2">
           <v-btn v-for="dice in 5" :key="dice"
                  @click="selectForReroll(dice - 1)"
@@ -144,21 +138,40 @@ function disablePlayHand(player: number, pattern: Patterns, hand: DiceHand): boo
         </v-btn-group>
       </v-col>
 
-      <v-row>
-        <v-col cols="12">
-        <h2>Play options</h2>
-        </v-col>
-        <v-col cols="12" v-for="section in ['upper', 'lower']" :key="section" >
-          <v-btn v-for="pattern in HAND_PATTERNS[section]" :key="pattern" min-width="50px" class="ma-1 rounded-b-shaped"
-                 @click="playHand(turn, pattern, hand); $emit('pass-the-dice')"
-                 :disabled="disablePlayHand(turn, pattern, hand)"
-                 :color="playColor(turn, pattern, hand)"
-          >
-            {{ formatPattern(pattern) }}
-            <sub v-if="notYetPlayed(turn, pattern)">{{ potentialPoints(turn, pattern, hand) }}</sub>
-          </v-btn>
-        </v-col>
-      </v-row>
+      <v-col cols="6">
+          <h2>Total Score</h2>
+        <v-row>
+          <v-col v-for="player in gameStore.players" :key="player">
+            <div style="text-align: left">
+              <b :color="player.color">
+                {{ formatPattern(player.id) }}
+              </b>
+              <br>
+              <code style="font-size: 24px">
+                {{ player.score.totalScore()}}
+              </code>
+            </div>
+          </v-col>
+        </v-row>
+      </v-col>
+
+      <v-col cols="12">
+        <v-row>
+          <v-col cols="12">
+            <h2 style="font-weight: bold">Play options</h2>
+          </v-col>
+          <v-col cols="12" v-for="section in ['upper', 'lower']" :key="section" >
+            <v-btn v-for="pattern in HAND_PATTERNS[section]" :key="pattern" min-width="50px" class="ma-1 rounded-b-shaped"
+                   @click="playHand(turn, pattern, hand); $emit('pass-the-dice')"
+                   :disabled="disablePlayHand(turn, pattern, hand)"
+                   :color="playColor(turn, pattern, hand)"
+            >
+              {{ formatPattern(pattern) }}
+              <sub v-if="notYetPlayed(turn, pattern)">{{ potentialPoints(turn, pattern, hand) }}</sub>
+            </v-btn>
+          </v-col>
+        </v-row>
+      </v-col>
     </v-row>
 
   </v-container>

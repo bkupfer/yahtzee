@@ -18,7 +18,7 @@ export const useGameStore = defineStore("yatzi", {
 
     actions: {
         addPlayer(name: string) {
-            this.players.push(new Player(name));
+            this.players.push(new Player(name, this.players.length));
         }
     }
 

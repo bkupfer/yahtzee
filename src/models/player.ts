@@ -4,9 +4,11 @@ import {ScoreCard} from "@/models/scoreboard";
 export class Player {
     id: string;
     score: ScoreCard = new ScoreCard();
+    color: string;
 
-    constructor(name: string) {
+    constructor(name: string, colorIdx: number) {
         this.id = name;
+        this.color = playerColor(colorIdx);
     }
 }
 
