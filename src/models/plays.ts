@@ -202,7 +202,11 @@ export class Satan extends AbsPlay {
     score(hand: DiceHand): number {
         const count = countDices(hand);
         if (3 <= count[6]) {
-            return 40 + (count[6] - 3) * 10;
+            let bonus = 40 + (count[6] - 3) * 10;
+            if (count[6] === 5) {
+                bonus += 5;
+            }
+            return bonus;
         }
         return 0;
     }
@@ -231,7 +235,7 @@ export class SmallMichi extends AbsPlay {
         return 0;
     }
 }
-export class BigMichi extends AbsPlay {
+export class PowerMichi extends AbsPlay {
     score(hand: DiceHand): number {
         const count = countDices(hand);
         if (count[2] === 0 && count[3] === 0 && count[4] === 0 && count[5] === 0) {

@@ -30,7 +30,7 @@ function passTheDices() {
 <template>
   <v-container>
     <v-row>
-      <h1 class="pa-4">Yatzy!</h1>
+      <h1 class="py-5 pl-3" style="font-weight: bold; color: #ffa71a">Yatzy!</h1>
     </v-row>
     <v-row>
       <v-cols cols="12">
@@ -39,7 +39,6 @@ function passTheDices() {
             <RegisterPlayers @start-game="startGame" />
           </v-col>
         </v-row>
-
         <v-row v-else>
           <v-col cols="12">
             <TurnInputs @pass-the-dice="passTheDices" :round="round" :turn="turn" />

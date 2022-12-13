@@ -6,6 +6,7 @@ import type {ScoreCard, UpperPatterns, LowerSection, Patterns} from "@/models/sc
 import {HAND_PATTERNS} from "@/models/scoreboard";
 import {formatPattern} from "./helpers";
 import type {Play} from "@/models/plays";
+import {playerColor} from "@/models/player";
 
 
 const props = defineProps({
@@ -45,7 +46,7 @@ function randomizeRerolls() {
 }
 
 function setHandToZero() {
-  hand.value = new DiceHand([0, 0, 0, 0, 0]);
+  hand.value.dices = [0, 0, 0, 0, 0];
 }
 
 function playHand(player: number, pattern: Patterns, hand: DiceHand): void {
@@ -53,6 +54,7 @@ function playHand(player: number, pattern: Patterns, hand: DiceHand): void {
   const play: Play = scoreboard.getPlay(pattern);
   play.play(hand);
   setHandToZero();
+  reroll.value = [];
 }
 
 function playColor(player: number, pattern: Patterns, hand: DiceHand): string {
@@ -109,7 +111,8 @@ function disablePlayHand(player: number, pattern: Patterns, hand: DiceHand): boo
     <v-col cols="12">
 
       <v-col cols="12">
-        <h2>Turn {{ round }} - {{ formatPattern(gameStore.players[turn].id) }}</h2>
+        <h2>Turn {{ round }} - <span :color="playerColor(turn)" style="font-weight: bold">{{ formatPattern(gameStore.players[turn].id) }}</span></h2>
+        <br>
         <span v-if="randomInputs">Random</span>
         <span v-else>Manual</span>
         play:

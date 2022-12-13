@@ -1,13 +1,13 @@
 import type {Play} from "@/models/plays";
 import {
-    BigMichi, Bowser,
+    Bowser,
     CountPlay, FakeYahtzee, FourTowers,
     FullHouse,
     HighCard,
     HighStraight,
     LowStraight, OceanBlue,
     Pair,
-    Poker, Satan, Skip, SmallMichi, SumChoice,
+    Poker, PowerMichi, Satan, Skip, SmallMichi, SumChoice,
     ThreeOfAKind, TripleOilMonkey,
     TwoPairs,
     Yahtzee
@@ -17,7 +17,7 @@ import type {DiceHand} from "@/models/hand";
 
 export const HAND_PATTERNS = {
     upper: ['bowser', 'big_bowser', 'skip', 'high_card', 'pairs', 'two_pairs', 'three_of_a_kind', 'full_house', 'low_straight', 'high_straight', 'poker', 'yahtzee', 'satan'],
-    lower: ['aces', 'twos', 'threes', 'fours', 'fives', 'sixes', 'sum_choice', 'small_michi', 'big_michi', 'four_towers', 'triple_oil_monkey', 'ocean_blue', 'fake_yahtzee'],
+    lower: ['aces', 'twos', 'threes', 'fours', 'fives', 'sixes', 'sum_choice', 'small_michi', 'ocean_blue', 'power_michi', 'triple_oil_monkey', 'fake_yahtzee', 'four_towers'],
 } as const;
 
 export type UpperPatterns = typeof HAND_PATTERNS.upper[number];
@@ -123,7 +123,7 @@ export class LowerSection extends Section {
     sixes: Play = new CountPlay(6);
     sum_choice: Play = new SumChoice();
     small_michi: Play = new SmallMichi();
-    big_michi: Play = new BigMichi();
+    power_michi: Play = new PowerMichi();
     four_towers: Play = new FourTowers();
     triple_oil_monkey: Play = new TripleOilMonkey();
     ocean_blue: Play = new OceanBlue();
@@ -154,7 +154,7 @@ export class LowerSection extends Section {
         total_points += this.sixes.points;
         total_points += this.sum_choice.points;
         total_points += this.small_michi.points;
-        total_points += this.big_michi.points;
+        total_points += this.power_michi.points;
         total_points += this.four_towers.points;
         total_points += this.triple_oil_monkey.points;
         total_points += this.ocean_blue.points;
