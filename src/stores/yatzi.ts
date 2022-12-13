@@ -17,7 +17,10 @@ export const useGameStore = defineStore("yatzi", {
       },
       totalNumberOfRounds: (state) => {
           return () => {
-              return HAND_PATTERNS.upper.length + HAND_PATTERNS.lower.length;
+              return HAND_PATTERNS.upper.length
+                  + HAND_PATTERNS.lower.length
+                  + HAND_PATTERNS.special.length
+                  + HAND_PATTERNS.evil.length;
           }
       },
     },

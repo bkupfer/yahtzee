@@ -97,6 +97,29 @@ const gameStore = useGameStore();
           </span>
         </td>
       </tr>
+      <!-- evil section -->
+      <tr v-for="pattern in HAND_PATTERNS.evil" :key="pattern">
+        <th>{{ formatPattern(pattern) }}</th>
+        <td v-for="player in gameStore.players" :key="player.id">
+          <span v-if="player.score.evilSection[pattern].played">
+            {{ player.score.evilSection[pattern].points }}
+          </span>
+        </td>
+      </tr>
+      <tr>
+        <th class="section_score">Special section score</th>
+        <td v-for="player in gameStore.players" :key="player.id" class="section_score">
+          {{ player.score.specialSection.flatScore() }}
+        </td>
+      </tr>
+      <tr>
+        <th class="section_score">{{ formatPattern('Special Bonus') }}</th>
+        <td v-for="player in gameStore.players" :key="player.id" class="section_score">
+          <span v-if="player.score.specialSection.bonus()">
+            {{ player.score.specialSection.bonus() }}
+          </span>
+        </td>
+      </tr>
       <!-- final score -->
       <tr>
         <th class="total_score">Total Score</th>

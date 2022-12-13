@@ -6,16 +6,20 @@ export const HAND_PATTERNS = {
         'aces', 'twos', 'threes', 'fours', 'fives', 'sixes', 'sum_choice',
     ],
     special: [
-        'bowser', 'big_bowser', 'skip', 'high_card', 'pichanga', 'twins', 'small_michi', 'heavenly_grace', 'ocean_blue',
+        'high_card', 'pichanga', 'twins', 'small_michi', 'heavenly_grace', 'ocean_blue',
         'power_michi', 'triple_oil_monkey', 'fake_yahtzee', 'four_towers', 'satan',
+    ],
+    evil: [
+        'bowser', 'big_bowser', 'skip',
     ],
 } as const;
 
 export type UpperPatterns = typeof HAND_PATTERNS.upper[number];
 export type LowerPatterns = typeof HAND_PATTERNS.lower[number];
 export type SpecialPatterns = typeof HAND_PATTERNS.special[number];
+export type EvilPatterns = typeof HAND_PATTERNS.evil[number];
 
-export type Patterns = UpperPatterns | LowerPatterns | SpecialPatterns;
+export type Patterns = UpperPatterns | LowerPatterns | SpecialPatterns | EvilPatterns;
 
 export class PatternGuard {
     static isUpperPattern(pattern: Patterns): boolean {
@@ -26,5 +30,8 @@ export class PatternGuard {
     }
     static isSpecialPattern(pattern: Patterns): boolean {
         return ((<Readonly<Array<string>>>HAND_PATTERNS.special).includes(pattern));
+    }
+    static isEvilPattern(pattern: Patterns): boolean {
+        return ((<Readonly<Array<string>>>HAND_PATTERNS.evil).includes(pattern));
     }
 }

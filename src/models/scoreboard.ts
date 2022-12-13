@@ -13,7 +13,7 @@ import {
     Yahtzee
 } from "@/models/plays";
 import type {DiceHand} from "@/models/hand";
-import type {LowerPatterns, Patterns, SpecialPatterns, UpperPatterns} from "@/models/patterns";
+import type {EvilPatterns, LowerPatterns, Patterns, SpecialPatterns, UpperPatterns} from "@/models/patterns";
 import {HAND_PATTERNS, PatternGuard} from "@/models/patterns";
 
 
@@ -21,6 +21,7 @@ export class ScoreCard {
     upperSection: Section = new UpperSection();
     lowerSection: Section = new LowerSection();
     specialSection: Section = new SpecialSection();
+    evilSection: Section = new EvilSection();
 
     getPlay(pattern: Patterns): Play {
         if (PatternGuard.isUpperPattern(pattern)) {
@@ -29,19 +30,26 @@ export class ScoreCard {
         else if (PatternGuard.isLowerPattern(pattern)) {
             return (<LowerSection>this.lowerSection)[<LowerPatterns>pattern];
         }
-        else { // (PatternGuard.isSpecialPattern(pattern)) {
+        else if (PatternGuard.isSpecialPattern(pattern)) {
             return (<SpecialSection>this.specialSection)[<SpecialPatterns>pattern];
+        }
+        else {
+            return (<EvilSection>this.evilSection)[<EvilPatterns>pattern];
         }
     }
 
     nonZeroPlayAvailable(hand: DiceHand): boolean {
         return this.upperSection.existsValidPlay(hand)
             || this.lowerSection.existsValidPlay(hand)
-            || this.specialSection.existsValidPlay(hand);
+            || this.specialSection.existsValidPlay(hand)
+            || this.evilSection.existsValidPlay(hand);
     }
 
     totalScore(): number {
-        return this.upperSection.totalScore() + this.lowerSection.totalScore() + this.specialSection.totalScore();
+        return this.upperSection.totalScore()
+            + this.lowerSection.totalScore()
+            + this.specialSection.totalScore()
+            + this.evilSection.totalScore();
     }
 }
 
@@ -135,9 +143,6 @@ export class LowerSection extends Section {
 }
 
 export class SpecialSection extends Section {
-    bowser: Play = new Bowser(1);
-    big_bowser: Play = new Bowser(3);
-    skip: Play = new Skip();
     high_card: Play = new HighCard();
     small_michi: Play = new SmallMichi();
     pichanga: Play = new Pichanga();
@@ -168,8 +173,6 @@ export class SpecialSection extends Section {
 
     flatScore(): number {
         let total_points = 0;
-        total_points += this.bowser.points;
-        total_points += this.big_bowser.points;
         total_points += this.high_card.points;
         total_points += this.pichanga.points;
         total_points += this.small_michi.points;
@@ -184,4 +187,33 @@ export class SpecialSection extends Section {
         return total_points;
     }
 
+}
+
+export class EvilSection extends Section {
+    bowser: Play = new Bowser(1);
+    big_bowser: Play = new Bowser(3);
+    skip: Play = new Skip();
+
+    bonus(): number {
+        return this.flatScore() === 1 ? -50 : 0;
+    }
+
+    existsValidPlay(hand: DiceHand): boolean {
+        let validPlay: boolean = false;
+        HAND_PATTERNS.evil.forEach((pattern: EvilPatterns) => {
+            const play: Play = this[pattern];
+            if (!play.played && play.score(hand) !== 0) {
+                validPlay = true;
+            }
+        });
+        return validPlay;
+    }
+
+    flatScore(): number {
+        let totalScore = 0;
+        totalScore += this.bowser.points;
+        totalScore += this.big_bowser.points;
+        totalScore += this.skip.points;
+        return totalScore;
+    }
 }

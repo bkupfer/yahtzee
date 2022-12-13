@@ -162,7 +162,7 @@ function disablePlayHand(player: number, pattern: Patterns, hand: DiceHand): boo
           <v-col cols="12">
             <h2 style="font-weight: bold">Play options</h2>
           </v-col>
-          <v-col cols="12" v-for="section in ['upper', 'lower', 'special']" :key="section" >
+          <v-col cols="12" v-for="section in ['upper', 'lower', 'special', 'evil']" :key="section" >
             <v-btn v-for="pattern in HAND_PATTERNS[section]" :key="pattern" min-width="50px" class="ma-1 rounded-b-shaped"
                    @click="playHand(turn, pattern, hand); $emit('pass-the-dice')"
                    :disabled="disablePlayHand(turn, pattern, hand)"
