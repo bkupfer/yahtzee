@@ -117,7 +117,7 @@ function disablePlayHand(player: number, pattern: Patterns, hand: DiceHand): boo
       </v-col>
       <v-col cols="12">
         <div v-if="randomInputs">
-          <v-btn v-on:click="randomizeHand()" color="secondary" class="mx-1">Generate hand</v-btn>
+          <v-btn v-on:click="randomizeHand()" color="secondary" class="mr-1">Generate hand</v-btn>
           <v-btn v-show="reroll.length !== 0 && rerollAttempts < 3" v-on:click="randomizeRerolls()" color="secondary">
             Throw reroll ({{ rerollAttempts + 1 }})
           </v-btn>
@@ -135,7 +135,7 @@ function disablePlayHand(player: number, pattern: Patterns, hand: DiceHand): boo
           <v-btn v-for="dice in 5" :key="dice"
                  @click="selectForReroll(dice - 1)"
                  :color="reroll.includes(dice - 1) ? 'secondary' : 'primary'"
-                 class="ml-1"
+                 class="mr-1"
           >
             {{ hand.dices[dice - 1] }}
           </v-btn>

@@ -1,21 +1,25 @@
 <script setup lang="ts">
 import {useGameStore} from "@/stores/yatzi";
+import {ref} from "vue";
 
 defineEmits(['start-game'])
 
 const gameStore = useGameStore();
 
-const playerNameInput: string = ""
+const playerNameInput = ref<string>("");
 
 const addPlayer = (name: string) => {
-  gameStore.addPlayer(name);
+  if (name) {
+    gameStore.addPlayer(name);
+    playerNameInput.value = "";
+  }
 }
 </script>
 
 <template>
-  <div>
+  <v-container>
     <h2>Register player</h2>
-    <input v-model="playerNameInput" type="text" placeholder="player name">
+    <input v-model="playerNameInput" type="text" placeholder="Player name">
     <v-btn v-on:click="addPlayer(playerNameInput)" color="primary">
       Add player
     </v-btn>
@@ -25,11 +29,12 @@ const addPlayer = (name: string) => {
       <ol>
         <li v-for="player in gameStore.players" v-bind:key="player.id">{{ player.id }}</li>
       </ol>
+      <br>
       <v-btn v-on:click="$emit('start-game')" color="success">
         Start game
       </v-btn>
     </div>
-  </div>
+  </v-container>
 </template>
 
 <style scoped>

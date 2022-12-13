@@ -39,13 +39,11 @@ function passTheDices() {
             <RegisterPlayers @start-game="startGame" />
           </v-col>
         </v-row>
+
         <v-row v-else>
           <v-col cols="12">
             <TurnInputs @pass-the-dice="passTheDices" :round="round" :turn="turn" />
           </v-col>
-        </v-row>
-
-        <v-row>
           <v-col cols="12">
             <GameScoreboard />
           </v-col>
