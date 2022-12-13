@@ -228,7 +228,7 @@ export class Bowser extends AbsPlay {
 export class SmallMichi extends AbsPlay {
     score(hand: DiceHand): number {
         const count = countDices(hand);
-        if (count[1] + count[6] === 5) {
+        if (count[2] + count[3] + count[4] + count[5] === 5) {
             return 15;
         }
         return 0;
@@ -237,7 +237,7 @@ export class SmallMichi extends AbsPlay {
 export class PowerMichi extends AbsPlay {
     score(hand: DiceHand): number {
         const count = countDices(hand);
-        if (count[2] + count[3] + count[4] + count[5] === 5) {
+        if (count[1] + count[6] === 5) {
             return 25;
         }
         return 0;
@@ -295,7 +295,7 @@ export class SumChoice extends AbsPlay {
 export class HeavenlyGrace extends AbsPlay {
     score(hand: DiceHand): number {
         const count = countDices(hand);
-        if (count[4] + count[5] + count[6] === 5) {
+        if (count[1] + count[5] + count[6] === 5) {
             return 15;
         }
         return 0;
