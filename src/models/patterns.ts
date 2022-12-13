@@ -1,3 +1,6 @@
+export const SECTION_PATTERN = ['upper', 'lower', 'special', 'evil'] as const;
+export type SectionPatterns = typeof SECTION_PATTERN[number];
+
 export const HAND_PATTERNS = {
     upper: [
         'pairs', 'two_pairs', 'three_of_a_kind', 'full_house', 'low_straight', 'high_straight', 'poker', 'yahtzee',

@@ -1,4 +1,4 @@
-import type {Play} from "@/models/plays";
+import type {Play} from "../models/plays";
 import {
     Bomb,
     Bowser, Casino,
@@ -12,10 +12,10 @@ import {
     ThreeOfAKind, Trader, TripleOilMonkey, Twins,
     TwoPairs,
     Yahtzee
-} from "@/models/plays";
-import type {DiceHand} from "@/models/hand";
-import type {EvilPatterns, LowerPatterns, Patterns, SpecialPatterns, UpperPatterns} from "@/models/patterns";
-import {HAND_PATTERNS, PatternGuard} from "@/models/patterns";
+} from "../models/plays";
+import type {DiceHand} from "../models/hand";
+import type {EvilPatterns, LowerPatterns, Patterns, SpecialPatterns, UpperPatterns} from "../models/patterns";
+import {HAND_PATTERNS, PatternGuard} from "../models/patterns";
 
 
 export class ScoreCard {
