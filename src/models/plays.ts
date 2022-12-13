@@ -207,8 +207,16 @@ export class Satan extends AbsPlay {
 }
 
 export class Bowser extends AbsPlay {
+    damage: number = 1;
+
+    constructor(damage: number) {
+        super();
+        this.damage = damage;
+    }
+
     score(hand: DiceHand): number {
-        return -hand.dices.reduce((dice, sum) => dice + sum, 0);
+        const sum = hand.dices.reduce((d, s) => d + s, 0);
+        return -this.damage * sum;
     }
 }
 

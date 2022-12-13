@@ -16,7 +16,7 @@ import type {DiceHand} from "@/models/hand";
 
 
 export const HAND_PATTERNS = {
-    upper: ['skip', 'high_card', 'pairs', 'two_pairs', 'three_of_a_kind', 'full_house', 'low_straight', 'high_straight', 'poker', 'yahtzee', 'satan', 'bowser'],
+    upper: ['skip', 'high_card', 'pairs', 'two_pairs', 'three_of_a_kind', 'full_house', 'low_straight', 'high_straight', 'poker', 'yahtzee', 'satan', 'bowser', 'big_bowser'],
     lower: ['aces', 'twos', 'threes', 'fours', 'fives', 'sixes', 'sum_choice', 'small_michi', 'big_michi', 'four_fingers', 'triple_oil_monkey', 'fake_yahtzee'],
 } as const;
 
@@ -27,7 +27,7 @@ export type Patterns = UpperPatterns | LowerPatterns;
 
 function isUpperPattern(pattern: Patterns): boolean {
     // todo: there has to be a better way of doing this
-    const upper: string[] = ['skip', 'high_card', 'pairs', 'two_pairs', 'three_of_a_kind', 'full_house', 'low_straight', 'high_straight', 'poker', 'yahtzee', 'satan', 'bowser'];
+    const upper: string[] = ['skip', 'high_card', 'pairs', 'two_pairs', 'three_of_a_kind', 'full_house', 'low_straight', 'high_straight', 'poker', 'yahtzee', 'satan', 'bowser', 'big_bowser'];
     return upper.includes(pattern);
 }
 
@@ -77,7 +77,8 @@ export class UpperSection extends Section {
     poker: Play = new Poker();
     yahtzee: Play = new Yahtzee();
     satan: Play = new Satan();
-    bowser: Play = new Bowser();
+    bowser: Play = new Bowser(1);
+    big_bowser: Play = new Bowser(3);
 
     existsValidPlay(hand: DiceHand): boolean {
         let validPlay: boolean = false;
@@ -107,6 +108,7 @@ export class UpperSection extends Section {
         total_points += this.yahtzee.points;
         total_points += this.satan.points;
         total_points += this.bowser.points;
+        total_points += this.big_bowser.points;
         return total_points;
     }
 }
