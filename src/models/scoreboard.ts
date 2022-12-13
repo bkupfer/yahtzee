@@ -13,44 +13,35 @@ import {
     Yahtzee
 } from "@/models/plays";
 import type {DiceHand} from "@/models/hand";
-
-
-export const HAND_PATTERNS = {
-    upper: ['bowser', 'big_bowser', 'skip', 'high_card', 'pairs', 'two_pairs', 'three_of_a_kind', 'full_house', 'low_straight', 'high_straight', 'poker', 'yahtzee', 'satan'],
-    lower: ['aces', 'twos', 'threes', 'fours', 'fives', 'sixes', 'pichanga', 'sum_choice', 'twins', 'small_michi', 'heavenly_grace', 'ocean_blue', 'power_michi', 'triple_oil_monkey', 'fake_yahtzee', 'four_towers'],
-} as const;
-
-export type UpperPatterns = typeof HAND_PATTERNS.upper[number];
-export type LowerPatterns = typeof HAND_PATTERNS.lower[number];
-
-export type Patterns = UpperPatterns | LowerPatterns;
-
-function isUpperPattern(pattern: Patterns): boolean {
-    // todo: there has to be a better way of doing this
-    const upper: string[] = ['bowser', 'big_bowser', 'skip', 'high_card', 'pairs', 'two_pairs', 'three_of_a_kind', 'full_house', 'low_straight', 'high_straight', 'poker', 'yahtzee', 'satan'];
-    return upper.includes(pattern);
-}
+import type {LowerPatterns, Patterns, SpecialPatterns, UpperPatterns} from "@/models/patterns";
+import {HAND_PATTERNS, PatternGuard} from "@/models/patterns";
 
 
 export class ScoreCard {
     upperSection: Section = new UpperSection();
     lowerSection: Section = new LowerSection();
+    specialSection: Section = new SpecialSection();
 
     getPlay(pattern: Patterns): Play {
-        if (isUpperPattern(pattern)) {
+        if (PatternGuard.isUpperPattern(pattern)) {
             return (<UpperSection>this.upperSection)[<UpperPatterns>pattern];
         }
-        else {
+        else if (PatternGuard.isLowerPattern(pattern)) {
             return (<LowerSection>this.lowerSection)[<LowerPatterns>pattern];
+        }
+        else { // (PatternGuard.isSpecialPattern(pattern)) {
+            return (<SpecialSection>this.specialSection)[<SpecialPatterns>pattern];
         }
     }
 
     nonZeroPlayAvailable(hand: DiceHand): boolean {
-        return this.upperSection.existsValidPlay(hand) || this.lowerSection.existsValidPlay(hand);
+        return this.upperSection.existsValidPlay(hand)
+            || this.lowerSection.existsValidPlay(hand)
+            || this.specialSection.existsValidPlay(hand);
     }
 
     totalScore(): number {
-        return this.upperSection.totalScore() + this.lowerSection.totalScore();
+        return this.upperSection.totalScore() + this.lowerSection.totalScore() + this.specialSection.totalScore();
     }
 }
 
@@ -66,8 +57,6 @@ export abstract class Section {
 }
 
 export class UpperSection extends Section {
-    skip: Play = new Skip();
-    high_card: Play = new HighCard();
     pairs: Play = new Pair();
     two_pairs: Play = new TwoPairs();
     three_of_a_kind: Play = new ThreeOfAKind();
@@ -76,9 +65,6 @@ export class UpperSection extends Section {
     high_straight: Play = new HighStraight();
     poker: Play = new Poker();
     yahtzee: Play = new Yahtzee();
-    satan: Play = new Satan();
-    bowser: Play = new Bowser(1);
-    big_bowser: Play = new Bowser(3);
 
     existsValidPlay(hand: DiceHand): boolean {
         let validPlay: boolean = false;
@@ -92,12 +78,11 @@ export class UpperSection extends Section {
     }
 
     bonus(): number {
-        return 150 <= this.flatScore() ? 50 : 0;
+        return 50 <= this.flatScore() ? 50 : 0;
     }
 
     flatScore(): number {
         let total_points = 0;
-        total_points += this.high_card.points;
         total_points += this.pairs.points;
         total_points += this.two_pairs.points;
         total_points += this.three_of_a_kind.points;
@@ -106,9 +91,6 @@ export class UpperSection extends Section {
         total_points += this.high_straight.points;
         total_points += this.poker.points;
         total_points += this.yahtzee.points;
-        total_points += this.satan.points;
-        total_points += this.bowser.points;
-        total_points += this.big_bowser.points;
         return total_points;
     }
 }
@@ -121,16 +103,7 @@ export class LowerSection extends Section {
     fours: Play = new CountPlay(4);
     fives: Play = new CountPlay(5);
     sixes: Play = new CountPlay(6);
-    pichanga: Play = new Pichanga();
     sum_choice: Play = new SumChoice();
-    small_michi: Play = new SmallMichi();
-    power_michi: Play = new PowerMichi();
-    four_towers: Play = new FourTowers();
-    triple_oil_monkey: Play = new TripleOilMonkey();
-    ocean_blue: Play = new OceanBlue();
-    heavenly_grace: Play = new HeavenlyGrace();
-    twins: Play = new Twins();
-    fake_yahtzee: Play = new FakeYahtzee();
 
     existsValidPlay(hand: DiceHand): boolean {
         let validPlay: boolean = false;
@@ -144,7 +117,7 @@ export class LowerSection extends Section {
     }
 
     bonus(): number {
-        return 150 <= this.flatScore() ? 50 : 0;
+        return 50 <= this.flatScore() ? 50 : 0;
     }
 
     flatScore(): number {
@@ -155,8 +128,50 @@ export class LowerSection extends Section {
         total_points += this.fours.points;
         total_points += this.fives.points;
         total_points += this.sixes.points;
-        total_points += this.pichanga.points;
         total_points += this.sum_choice.points;
+
+        return total_points;
+    }
+}
+
+export class SpecialSection extends Section {
+    bowser: Play = new Bowser(1);
+    big_bowser: Play = new Bowser(3);
+    skip: Play = new Skip();
+    high_card: Play = new HighCard();
+    small_michi: Play = new SmallMichi();
+    pichanga: Play = new Pichanga();
+    power_michi: Play = new PowerMichi();
+    four_towers: Play = new FourTowers();
+    triple_oil_monkey: Play = new TripleOilMonkey();
+    ocean_blue: Play = new OceanBlue();
+    heavenly_grace: Play = new HeavenlyGrace();
+    twins: Play = new Twins();
+    fake_yahtzee: Play = new FakeYahtzee();
+    satan: Play = new Satan();
+
+
+    bonus(): number {
+        return 100 <= this.flatScore() ? 50 : 0;
+    }
+
+    existsValidPlay(hand: DiceHand): boolean {
+        let validPlay: boolean = false;
+        HAND_PATTERNS.special.forEach((pattern: SpecialPatterns) => {
+            const play: Play = this[pattern];
+            if (!play.played && play.score(hand) !== 0) {
+                validPlay = true;
+            }
+        });
+        return validPlay;
+    }
+
+    flatScore(): number {
+        let total_points = 0;
+        total_points += this.bowser.points;
+        total_points += this.big_bowser.points;
+        total_points += this.high_card.points;
+        total_points += this.pichanga.points;
         total_points += this.small_michi.points;
         total_points += this.power_michi.points;
         total_points += this.heavenly_grace.points;
@@ -165,6 +180,8 @@ export class LowerSection extends Section {
         total_points += this.triple_oil_monkey.points;
         total_points += this.ocean_blue.points;
         total_points += this.fake_yahtzee.points;
+        total_points += this.satan.points;
         return total_points;
     }
+
 }

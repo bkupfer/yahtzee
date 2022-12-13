@@ -1,7 +1,7 @@
 import {defineStore} from "pinia";
 import {ref} from "vue";
 import {Player} from "@/models/player";
-import {HAND_PATTERNS} from "@/models/scoreboard";
+import {HAND_PATTERNS} from "@/models/patterns";
 
 export const useGameStore = defineStore("yatzi", {
 

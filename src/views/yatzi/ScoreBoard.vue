@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import {useGameStore} from "@/stores/yatzi";
-import {HAND_PATTERNS} from "@/models/scoreboard";
 import {formatPattern} from "./helpers";
+import {HAND_PATTERNS} from "@/models/patterns";
 
 const gameStore = useGameStore();
 </script>
@@ -38,7 +38,7 @@ const gameStore = useGameStore();
         </td>
       </tr>
       <tr>
-        <th class="section_score">Section Score</th>
+        <th class="section_score">Upper section score</th>
         <td v-for="player in gameStore.players" :key="player.id" class="section_score">
           {{ player.score.upperSection.flatScore() }}
         </td>
@@ -61,7 +61,7 @@ const gameStore = useGameStore();
         </td>
       </tr>
       <tr>
-        <th class="section_score">Section Score</th>
+        <th class="section_score">Lower section score</th>
         <td v-for="player in gameStore.players" :key="player.id" class="section_score">
           {{ player.score.lowerSection.flatScore() }}
         </td>
@@ -74,7 +74,30 @@ const gameStore = useGameStore();
           </span>
         </td>
       </tr>
-      <!-- score -->
+      <!-- special section -->
+      <tr v-for="pattern in HAND_PATTERNS.special" :key="pattern">
+        <th>{{ formatPattern(pattern) }}</th>
+        <td v-for="player in gameStore.players" :key="player.id">
+          <span v-if="player.score.specialSection[pattern].played">
+            {{ player.score.specialSection[pattern].points }}
+          </span>
+        </td>
+      </tr>
+      <tr>
+        <th class="section_score">Special section score</th>
+        <td v-for="player in gameStore.players" :key="player.id" class="section_score">
+          {{ player.score.specialSection.flatScore() }}
+        </td>
+      </tr>
+      <tr>
+        <th class="section_score">{{ formatPattern('Special Bonus') }}</th>
+        <td v-for="player in gameStore.players" :key="player.id" class="section_score">
+          <span v-if="player.score.specialSection.bonus()">
+            {{ player.score.specialSection.bonus() }}
+          </span>
+        </td>
+      </tr>
+      <!-- final score -->
       <tr>
         <th class="total_score">Total Score</th>
         <td v-for="player in gameStore.players" :key="player.id" class="total_score">

@@ -12,13 +12,11 @@ const turn = ref(0);
 const numberOfPlayers = ref(0);
 
 function startGame() {
-  console.log('start game');
   numberOfPlayers.value = gameStore.players.length;
   round.value = 1;
 }
 
 function passTheDices() {
-  console.log('pass the dice');
   turn.value += 1;
   if (turn.value === numberOfPlayers.value) {
     turn.value = 0;

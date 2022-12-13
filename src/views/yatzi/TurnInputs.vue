@@ -2,11 +2,12 @@
 import {DiceHand, randomDice, randomHand} from "@/models/hand";
 import {ref} from "vue";
 import {useGameStore} from "@/stores/yatzi";
-import type {ScoreCard, Patterns} from "@/models/scoreboard";
-import {HAND_PATTERNS} from "@/models/scoreboard";
+import type {ScoreCard} from "@/models/scoreboard";
 import {formatPattern} from "./helpers";
 import type {Play} from "@/models/plays";
 import {playerColor} from "@/models/player";
+import type {Patterns} from "@/models/patterns";
+import {HAND_PATTERNS} from "@/models/patterns";
 
 
 const props = defineProps({
@@ -161,7 +162,7 @@ function disablePlayHand(player: number, pattern: Patterns, hand: DiceHand): boo
           <v-col cols="12">
             <h2 style="font-weight: bold">Play options</h2>
           </v-col>
-          <v-col cols="12" v-for="section in ['upper', 'lower']" :key="section" >
+          <v-col cols="12" v-for="section in ['upper', 'lower', 'special']" :key="section" >
             <v-btn v-for="pattern in HAND_PATTERNS[section]" :key="pattern" min-width="50px" class="ma-1 rounded-b-shaped"
                    @click="playHand(turn, pattern, hand); $emit('pass-the-dice')"
                    :disabled="disablePlayHand(turn, pattern, hand)"
