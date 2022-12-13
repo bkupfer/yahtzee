@@ -1,13 +1,13 @@
 import type {Play} from "@/models/plays";
 import {
     Bomb,
-    Bowser,
-    CountPlay, FakeYahtzee, FourTowers,
+    Bowser, Casino,
+    CountPlay, FakeYahtzee, FourStars, FourTowers,
     FullHouse, HeavenlyGrace,
     HighCard,
     HighStraight, LowestCard,
     LowStraight, OceanBlue,
-    Pair, Pichanga,
+    Pair,
     Poker, PowerMichi, Reaper, Satan, Skip, SmallMichi, SumChoice,
     ThreeOfAKind, Trader, TripleOilMonkey, Twins,
     TwoPairs,
@@ -146,7 +146,7 @@ export class LowerSection extends Section {
 export class SpecialSection extends Section {
     high_card: Play = new HighCard();
     small_michi: Play = new SmallMichi();
-    pichanga: Play = new Pichanga();
+    casino: Play = new Casino();
     power_michi: Play = new PowerMichi();
     four_towers: Play = new FourTowers();
     triple_oil_monkey: Play = new TripleOilMonkey();
@@ -154,6 +154,7 @@ export class SpecialSection extends Section {
     heavenly_grace: Play = new HeavenlyGrace();
     twins: Play = new Twins();
     fake_yahtzee: Play = new FakeYahtzee();
+    four_stars: Play = new FourStars();
     satan: Play = new Satan();
 
 
@@ -175,7 +176,7 @@ export class SpecialSection extends Section {
     flatScore(): number {
         let total_points = 0;
         total_points += this.high_card.points;
-        total_points += this.pichanga.points;
+        total_points += this.casino.points;
         total_points += this.small_michi.points;
         total_points += this.power_michi.points;
         total_points += this.heavenly_grace.points;
@@ -184,6 +185,7 @@ export class SpecialSection extends Section {
         total_points += this.triple_oil_monkey.points;
         total_points += this.ocean_blue.points;
         total_points += this.fake_yahtzee.points;
+        total_points += this.four_stars.points;
         total_points += this.satan.points;
         return total_points;
     }

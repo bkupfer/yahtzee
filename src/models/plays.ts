@@ -265,7 +265,7 @@ export class FourTowers extends AbsPlay {
         if (count[1] === 1) {
             for (let n = 2; n <= 6; n ++) {
                 if (count[n] === 4) {
-                    return 40;
+                    return 38;
                 }
             }
         }
@@ -318,7 +318,7 @@ export class HeavenlyGrace extends AbsPlay {
     }
 }
 
-export class Pichanga extends AbsPlay {
+export class Casino extends AbsPlay {
     score(hand: DiceHand): number {
         const count = countDices(hand);
         let zeroesCount = 0;
@@ -382,3 +382,14 @@ export class Bomb extends AbsPlay {
         return 0;
     }
 }
+
+export class FourStars extends AbsPlay {
+    score(hand: DiceHand): number {
+        const count = countDices(hand);
+        if (count[1] === 4) {
+            return 40;
+        }
+        return 0;
+    }
+}
+
