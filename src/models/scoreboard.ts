@@ -1,13 +1,14 @@
 import type {Play} from "@/models/plays";
 import {
+    Bomb,
     Bowser,
     CountPlay, FakeYahtzee, FourTowers,
     FullHouse, HeavenlyGrace,
     HighCard,
-    HighStraight,
+    HighStraight, LowestCard,
     LowStraight, OceanBlue,
     Pair, Pichanga,
-    Poker, PowerMichi, Satan, Skip, SmallMichi, SumChoice,
+    Poker, PowerMichi, Reaper, Satan, Skip, SmallMichi, SumChoice,
     ThreeOfAKind, Trader, TripleOilMonkey, Twins,
     TwoPairs,
     Yahtzee
@@ -186,15 +187,17 @@ export class SpecialSection extends Section {
         total_points += this.satan.points;
         return total_points;
     }
-
 }
 
 export class EvilSection extends Section {
     skip: Play = new Skip();
+    lowest_card: Play = new LowestCard();
     koopa: Play = new Bowser(1);
     bowser: Play = new Bowser(2);
     trader: Play = new Trader();
     big_bowser: Play = new Bowser(3);
+    reaper: Play = new Reaper();
+    bomb: Play = new Bomb();
 
     bonus(): number {
         return 0;
@@ -213,11 +216,14 @@ export class EvilSection extends Section {
 
     flatScore(): number {
         let totalScore = 0;
+        totalScore += this.skip.points;
+        totalScore += this.lowest_card.points;
         totalScore += this.koopa.points;
         totalScore += this.bowser.points;
         totalScore += this.big_bowser.points;
-        totalScore += this.skip.points;
         totalScore += this.trader.points;
+        totalScore += this.reaper.points;
+        totalScore += this.bomb.points;
         return totalScore;
     }
 }

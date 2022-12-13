@@ -10,7 +10,7 @@ export const HAND_PATTERNS = {
         'power_michi', 'triple_oil_monkey', 'fake_yahtzee', 'four_towers', 'satan',
     ],
     evil: [
-        'skip', 'koopa', 'bowser', 'big_bowser', 'trader',
+        'skip', 'lowest_card', 'koopa', 'bowser', 'big_bowser', 'trader', 'reaper', 'bomb',
     ],
 } as const;
 

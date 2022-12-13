@@ -4,6 +4,10 @@ export class DiceHand {
     constructor(rolls: Array<number>) {
         this.dices = rolls;
     }
+
+    played(): boolean {
+        return this.dices.every((dice: number) => dice !== 0);
+    }
 }
 
 export function randomDice(): number {

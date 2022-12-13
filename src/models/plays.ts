@@ -41,7 +41,10 @@ export class CountPlay extends AbsPlay {
 
 export class Skip extends AbsPlay {
     score(hand: DiceHand): number {
-        return 1;
+        if (hand.played()) {
+            return -1;
+        }
+        return 0;
     }
 }
 
@@ -245,6 +248,7 @@ export class SmallMichi extends AbsPlay {
         return 0;
     }
 }
+
 export class PowerMichi extends AbsPlay {
     score(hand: DiceHand): number {
         const count = countDices(hand);
@@ -280,6 +284,7 @@ export class FakeYahtzee extends AbsPlay {
         return 0;
     }
 }
+
 export class OceanBlue extends AbsPlay {
     score(hand: DiceHand): number {
         const count = countDices(hand);
@@ -339,6 +344,40 @@ export class Twins extends AbsPlay {
                     return 18;
                 }
             }
+        }
+        return 0;
+    }
+}
+
+export class LowestCard extends AbsPlay {
+    score(hand: DiceHand): number {
+        return -Math.min(...hand.dices);
+    }
+}
+
+export class Reaper extends AbsPlay {
+    punishment: number = -40;
+
+    score(hand: DiceHand): number {
+        if (hand.played()) {
+            const count = countDices(hand);
+            if (count[2] === 2) {
+                return 2;
+            }
+            return this.punishment;
+        }
+        return 0;
+    }
+}
+
+export class Bomb extends AbsPlay {
+    score(hand: DiceHand): number {
+        if (hand.played()) {
+            const count = countDices(hand);
+            if (count[1] !== 0) {
+                return 0;
+            }
+            return -20;
         }
         return 0;
     }
