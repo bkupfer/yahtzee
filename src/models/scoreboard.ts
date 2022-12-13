@@ -1,11 +1,11 @@
 import type {Play} from "@/models/plays";
 import {
     BigMichi, Bowser,
-    CountPlay, FakeYahtzee, FourFingers,
+    CountPlay, FakeYahtzee, FourTowers,
     FullHouse,
     HighCard,
     HighStraight,
-    LowStraight,
+    LowStraight, OceanBlue,
     Pair,
     Poker, Satan, Skip, SmallMichi, SumChoice,
     ThreeOfAKind, TripleOilMonkey,
@@ -16,8 +16,8 @@ import type {DiceHand} from "@/models/hand";
 
 
 export const HAND_PATTERNS = {
-    upper: ['skip', 'high_card', 'pairs', 'two_pairs', 'three_of_a_kind', 'full_house', 'low_straight', 'high_straight', 'poker', 'yahtzee', 'satan', 'bowser', 'big_bowser'],
-    lower: ['aces', 'twos', 'threes', 'fours', 'fives', 'sixes', 'sum_choice', 'small_michi', 'big_michi', 'four_fingers', 'triple_oil_monkey', 'fake_yahtzee'],
+    upper: ['bowser', 'big_bowser', 'skip', 'high_card', 'pairs', 'two_pairs', 'three_of_a_kind', 'full_house', 'low_straight', 'high_straight', 'poker', 'yahtzee', 'satan'],
+    lower: ['aces', 'twos', 'threes', 'fours', 'fives', 'sixes', 'sum_choice', 'small_michi', 'big_michi', 'four_towers', 'triple_oil_monkey', 'ocean_blue', 'fake_yahtzee'],
 } as const;
 
 export type UpperPatterns = typeof HAND_PATTERNS.upper[number];
@@ -27,7 +27,7 @@ export type Patterns = UpperPatterns | LowerPatterns;
 
 function isUpperPattern(pattern: Patterns): boolean {
     // todo: there has to be a better way of doing this
-    const upper: string[] = ['skip', 'high_card', 'pairs', 'two_pairs', 'three_of_a_kind', 'full_house', 'low_straight', 'high_straight', 'poker', 'yahtzee', 'satan', 'bowser', 'big_bowser'];
+    const upper: string[] = ['bowser', 'big_bowser', 'skip', 'high_card', 'pairs', 'two_pairs', 'three_of_a_kind', 'full_house', 'low_straight', 'high_straight', 'poker', 'yahtzee', 'satan'];
     return upper.includes(pattern);
 }
 
@@ -92,7 +92,7 @@ export class UpperSection extends Section {
     }
 
     bonus(): number {
-        return 75 <= this.flatScore() ? 50 : 0;
+        return 100 <= this.flatScore() ? 50 : 0;
     }
 
     flatScore(): number {
@@ -124,8 +124,9 @@ export class LowerSection extends Section {
     sum_choice: Play = new SumChoice();
     small_michi: Play = new SmallMichi();
     big_michi: Play = new BigMichi();
-    four_fingers: Play = new FourFingers();
+    four_towers: Play = new FourTowers();
     triple_oil_monkey: Play = new TripleOilMonkey();
+    ocean_blue: Play = new OceanBlue();
     fake_yahtzee: Play = new FakeYahtzee();
 
     existsValidPlay(hand: DiceHand): boolean {
@@ -140,7 +141,7 @@ export class LowerSection extends Section {
     }
 
     bonus(): number {
-        return 65 <= this.flatScore() ? 35 : 0;
+        return 100 <= this.flatScore() ? 35 : 0;
     }
 
     flatScore(): number {
@@ -154,8 +155,9 @@ export class LowerSection extends Section {
         total_points += this.sum_choice.points;
         total_points += this.small_michi.points;
         total_points += this.big_michi.points;
-        total_points += this.four_fingers.points;
+        total_points += this.four_towers.points;
         total_points += this.triple_oil_monkey.points;
+        total_points += this.ocean_blue.points;
         total_points += this.fake_yahtzee.points;
         return total_points;
     }

@@ -73,6 +73,12 @@ function playColor(player: number, pattern: Patterns, hand: DiceHand): string {
   return 'default';
 }
 
+function potentialPoints(player: number, pattern: Patterns, hand: DiceHand): number {
+  const scoreboard: ScoreCard = gameStore.scoreboard(player);
+  const play: Play = scoreboard.getPlay(pattern);
+  return play.score(hand);
+}
+
 function disablePlayHand(player: number, pattern: Patterns, hand: DiceHand): boolean {
   const scoreboard: ScoreCard = gameStore.scoreboard(player);
   const play: Play = scoreboard.getPlay(pattern);
@@ -129,6 +135,7 @@ function disablePlayHand(player: number, pattern: Patterns, hand: DiceHand): boo
              :color="playColor(turn, pattern, hand)"
       >
         {{ formatPattern(pattern) }}
+        <sub>{{ potentialPoints(turn, pattern, hand) }}</sub>
       </v-btn>
     </v-btn-group>
 

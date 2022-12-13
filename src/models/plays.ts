@@ -152,7 +152,6 @@ export class HighStraight extends AbsPlay {
 export class TripleOilMonkey extends AbsPlay {
     score(hand: DiceHand): number {
         const count = countDices(hand);
-        console.log(count);
         let tripleOil = true;
         let oilBonus = 0;
         for (let i = 1; i <= 6; i ++) {
@@ -165,10 +164,13 @@ export class TripleOilMonkey extends AbsPlay {
                 if (2 <= count[i]) {
                     tripleOil = false;
                 }
-                oilBonus += i;
+                else {
+                    oilBonus += i * count[i];
+                }
             }
         }
-        return tripleOil ? 18 + oilBonus : 0;
+        console.log('oil bonus', oilBonus);
+        return tripleOil ? 18 + 2 * oilBonus : 0;
     }
 }
 
@@ -200,7 +202,7 @@ export class Satan extends AbsPlay {
     score(hand: DiceHand): number {
         const count = countDices(hand);
         if (3 <= count[6]) {
-            return 26;
+            return 40 + (count[6] - 3) * 10;
         }
         return 0;
     }
@@ -221,7 +223,6 @@ export class Bowser extends AbsPlay {
 }
 
 export class SmallMichi extends AbsPlay {
-    // {2,3,4,5}
     score(hand: DiceHand): number {
         const count = countDices(hand);
         if (count[1] === 0 && count[6] === 0) {
@@ -231,24 +232,22 @@ export class SmallMichi extends AbsPlay {
     }
 }
 export class BigMichi extends AbsPlay {
-    // {1, 6}
     score(hand: DiceHand): number {
         const count = countDices(hand);
         if (count[2] === 0 && count[3] === 0 && count[4] === 0 && count[5] === 0) {
-            return 15;
+            return 25;
         }
         return 0;
     }
 }
 
-export class FourFingers extends AbsPlay {
-    // 4 * {n} + 1
+export class FourTowers extends AbsPlay {
     score(hand: DiceHand): number {
         const count = countDices(hand);
         if (count[1] === 1) {
             for (let n = 2; n <= 6; n ++) {
                 if (count[n] === 4) {
-                    return 19;
+                    return 40;
                 }
             }
         }
@@ -267,7 +266,23 @@ export class FakeYahtzee extends AbsPlay {
         return 0;
     }
 }
-
+export class OceanBlue extends AbsPlay {
+    score(hand: DiceHand): number {
+        const count = countDices(hand);
+        if (count[3] === 1) {
+            let all_zero = true;
+            for (let i = 4; i <= 6; i ++) {
+                if (count[i] !== 0) {
+                    all_zero = false;
+                }
+            }
+            if (all_zero) {
+                return 20;
+            }
+        }
+        return 0;
+    }
+}
 export class SumChoice extends AbsPlay {
     score(hand: DiceHand): number {
         return hand.dices.reduce((value, aggregator) => value + aggregator);
