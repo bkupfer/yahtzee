@@ -79,6 +79,12 @@ function potentialPoints(player: number, pattern: Patterns, hand: DiceHand): num
   return play.score(hand);
 }
 
+function notYetPlayed(player: number, pattern: Patterns): boolean {
+  const scoreboard: ScoreCard = gameStore.scoreboard(player);
+  const play: Play = scoreboard.getPlay(pattern);
+  return !play.played;
+}
+
 function disablePlayHand(player: number, pattern: Patterns, hand: DiceHand): boolean {
   const scoreboard: ScoreCard = gameStore.scoreboard(player);
   const play: Play = scoreboard.getPlay(pattern);
@@ -99,47 +105,59 @@ function disablePlayHand(player: number, pattern: Patterns, hand: DiceHand): boo
 </script>
 
 <template>
-  <div>
-    <h2>Turn {{ round }} - {{ formatPattern(gameStore.players[turn].id) }}</h2>
-    Random inputs:
-    <input type="checkbox" id="checkbox" v-model="randomInputs" />
+  <v-row>
+    <v-col cols="12">
 
-    <div v-if="randomInputs">
-      Random play
-      <v-btn v-on:click="randomizeHand()" color="secondary">Generate hand</v-btn>
-      <v-btn v-show="reroll.length !== 0 && rerollAttempts < 3" v-on:click="randomizeRerolls()" color="secondary">
-        Throw reroll ({{ rerollAttempts + 1 }})
-      </v-btn>
-      <br>
-    </div>
-    <div v-else>
-      Manual play <br>
-      <span v-for="n in 5" :key="n">
-        <input v-model="hand.dices[n - 1]" type="number" :placeholder="'dice ' + n" min="1" max="6">
-      </span>
-    </div>
+      <v-col cols="12">
+        <h2>Turn {{ round }} - {{ formatPattern(gameStore.players[turn].id) }}</h2>
+        <span v-if="randomInputs">Random</span>
+        <span v-else="randomInputs">Manual</span>
+        play:
+        <input type="checkbox" id="checkbox" v-model="randomInputs" />
+      </v-col>
+      <v-col cols="12">
+        <div v-if="randomInputs">
+          <v-btn v-on:click="randomizeHand()" color="secondary">Generate hand</v-btn>
+          <v-btn v-show="reroll.length !== 0 && rerollAttempts < 3" v-on:click="randomizeRerolls()" color="secondary">
+            Throw reroll ({{ rerollAttempts + 1 }})
+          </v-btn>
+          <br>
+        </div>
+        <div v-else>
+          <span v-for="n in 5" :key="n">
+            <input v-model="hand.dices[n - 1]" type="number" :placeholder="'dice ' + n" min="1" max="6">
+          </span>
+        </div>
+      </v-col>
 
-    <div class="my-2">
-      <v-btn v-for="dice in 5" :key="dice"
-             @click="selectForReroll(dice - 1)"
-             :color="reroll.includes(dice - 1) ? 'secondary' : 'primary'">
-        {{ hand.dices[dice - 1] }}
-      </v-btn>
-    </div>
+      <v-col cols="6">
+        <div class="my-2">
+          <v-btn v-for="dice in 5" :key="dice"
+                 @click="selectForReroll(dice - 1)"
+                 :color="reroll.includes(dice - 1) ? 'secondary' : 'primary'"
+                 class="ml-1"
+          >
+            {{ hand.dices[dice - 1] }}
+          </v-btn>
+        </div>
+      </v-col>
 
-    <h2>Play options</h2>
-    <v-btn-group v-for="section in ['upper', 'lower']" :key="section">
-      <v-btn v-for="pattern in HAND_PATTERNS[section]" :key="pattern"
-             @click="playHand(turn, pattern, hand); $emit('pass-the-dice')"
-             :disabled="disablePlayHand(turn, pattern, hand)"
-             :color="playColor(turn, pattern, hand)"
-      >
-        {{ formatPattern(pattern) }}
-        <sub>{{ potentialPoints(turn, pattern, hand) }}</sub>
-      </v-btn>
-    </v-btn-group>
+      <v-col cols="12">
+        <h2>Play options</h2>
+        <v-btn-group v-for="section in ['upper', 'lower']" :key="section" >
+          <v-btn v-for="pattern in HAND_PATTERNS[section]" :key="pattern" min-width="50px" class="ma-1 rounded-b-shaped"
+                 @click="playHand(turn, pattern, hand); $emit('pass-the-dice')"
+                 :disabled="disablePlayHand(turn, pattern, hand)"
+                 :color="playColor(turn, pattern, hand)"
+          >
+            {{ formatPattern(pattern) }}
+            <sub v-if="notYetPlayed(turn, pattern)">{{ potentialPoints(turn, pattern, hand) }}</sub>
+          </v-btn>
+        </v-btn-group>
+      </v-col>
+    </v-col>
 
-  </div>
+  </v-row>
 </template>
 
 <style scoped>

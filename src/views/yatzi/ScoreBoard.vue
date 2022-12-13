@@ -40,6 +40,12 @@ const gameStore = useGameStore();
       </tr>
       <hr>
       <tr>
+        <th>Section Score</th>
+        <td v-for="player in gameStore.players" :key="player.id">
+          {{ player.score.upperSection.flatScore() }}
+        </td>
+      </tr>
+      <tr>
         <th>{{ formatPattern('Upper Bonus') }}</th>
         <td v-for="player in gameStore.players" :key="player.id">
           <span v-if="player.score.upperSection.bonus()">
@@ -58,6 +64,12 @@ const gameStore = useGameStore();
         </td>
       </tr>
       <hr>
+      <tr>
+        <th>Section Score</th>
+        <td v-for="player in gameStore.players" :key="player.id">
+          {{ player.score.lowerSection.flatScore() }}
+        </td>
+      </tr>
       <tr>
         <th>{{ formatPattern('Lower Bonus') }}</th>
         <td v-for="player in gameStore.players" :key="player.id">

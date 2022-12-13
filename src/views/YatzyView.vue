@@ -30,23 +30,25 @@ function passTheDices() {
 <template>
   <div>
     <h1>Yatzy!</h1>
-
-    <v-row v-if="round === 0">
-      <v-col cols="12">
-        <RegisterPlayers @start-game="startGame" />
-      </v-col>
-    </v-row>
-
-    <v-row v-else>
-      <v-col cols="12">
-        <TurnInputs @pass-the-dice="passTheDices" :round="round" :turn="turn" />
-      </v-col>
-    </v-row>
-
     <v-row>
-      <v-col cols="12">
-        <GameScoreboard />
-      </v-col>
+      <v-cols cols="12">
+        <v-row v-if="round === 0">
+          <v-col cols="12">
+            <RegisterPlayers @start-game="startGame" />
+          </v-col>
+        </v-row>
+        <v-row v-else>
+          <v-col cols="12">
+            <TurnInputs @pass-the-dice="passTheDices" :round="round" :turn="turn" />
+          </v-col>
+        </v-row>
+
+        <v-row>
+          <v-col cols="12">
+            <GameScoreboard />
+          </v-col>
+        </v-row>
+      </v-cols>
     </v-row>
   </div>
 </template>
