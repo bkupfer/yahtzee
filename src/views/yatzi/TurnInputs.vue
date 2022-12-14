@@ -8,6 +8,7 @@ import type { ScoreCard } from "@/models/scoreboard";
 import { useGameStore } from "@/stores/yatzi";
 import { ref } from "vue";
 import { formatPattern } from "./helpers";
+import ScoreSummary from "@/views/yatzi/TurnInputs/ScoreSummary.vue";
 
 const gameStore = useGameStore();
 const randomInputs = ref<boolean>(true);
@@ -137,22 +138,8 @@ function disablePlayHand(player: number, pattern: Patterns, hand: DiceHand): boo
         </v-btn-group>
       </v-col>
 
-      <!-- Score summary -->
       <v-col cols="6">
-          <h2>Total Score</h2>
-        <v-row>
-          <v-col v-for="player in gameStore.players" :key="player">
-            <div style="text-align: left">
-              <b :color="player.color">
-                {{ formatPattern(player.id) }}
-              </b>
-              <br>
-              <code style="font-size: 24px">
-                {{ player.score.totalScore()}}
-              </code>
-            </div>
-          </v-col>
-        </v-row>
+        <score-summary />
       </v-col>
 
       <!-- Plays menu -->

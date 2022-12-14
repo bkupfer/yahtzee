@@ -9,6 +9,7 @@ import { useGameStore } from "@/stores/yatzi";
 import { ref } from "vue";
 import { formatPattern } from "../helpers";
 
+
 </script>
 
 <template>
