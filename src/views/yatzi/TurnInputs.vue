@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import {DiceHand, randomDice, randomHand} from "@/models/hand";
-import {useGameStore} from "@/stores/yatzi";
-import {ref} from "vue";
+import { DiceHand, randomDice, randomHand } from "@/models/hand";
+import { useGameStore } from "@/stores/yatzi";
+import { ref } from "vue";
 import ScoreSummary from "@/views/yatzi/TurnInputs/ScoreSummary.vue";
 import PlaysMenu from "@/views/yatzi/TurnInputs/PlaysMenu.vue";
-import {playerColor} from "@/models/player";
-import {formatPattern} from "./helpers";
+import { playerColor } from "@/models/player";
+import { formatPattern } from "./helpers";
 
 const gameStore = useGameStore();
 
