@@ -2,7 +2,7 @@
 import {useGameStore} from "@/stores/yatzi";
 import {formatPattern} from "./helpers";
 import {HAND_PATTERNS} from "@/models/patterns";
-import PlayeresScoreRow from "@/views/yatzi/PlayeresScoreRow.vue";
+import PlayersScoreRow from "@/views/yatzi/Scoreboard/PlayersScoreRow.vue";
 
 const gameStore = useGameStore();
 </script>
@@ -20,7 +20,7 @@ const gameStore = useGameStore();
       </tr>
       </thead>
       <tbody>
-      <playeres-score-row />
+      <players-score-row />
       <!-- sections -->
       <template v-for="section in gameStore.sections" :key="section">
         <tr v-for="pattern in HAND_PATTERNS[section]" :key="pattern">
@@ -46,7 +46,7 @@ const gameStore = useGameStore();
           </td>
         </tr>
       </template>
-      <playeres-score-row />
+      <players-score-row />
       </tbody>
     </v-table>
   </v-container>
