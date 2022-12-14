@@ -13,21 +13,19 @@ const gameStore = useGameStore();
       <h1 class="py-5 pl-3" style="font-weight: bold; color: #ffa71a">Yatzy!</h1>
     </v-row>
     <v-row>
-      <v-cols cols="12">
-        <v-row v-if="gameStore.round === 0">
-          <v-col cols="12">
-            <RegisterPlayers @start-game="startGame" />
-          </v-col>
-        </v-row>
-        <v-row v-else>
-          <v-col cols="12">
-            <TurnInputs />
-          </v-col>
-          <v-col cols="12">
-            <GameScoreboard />
-          </v-col>
-        </v-row>
-      </v-cols>
+      <v-row v-if="gameStore.round === 0">
+        <v-col cols="12">
+          <RegisterPlayers />
+        </v-col>
+      </v-row>
+      <v-row v-else>
+        <v-col cols="12">
+          <TurnInputs />
+        </v-col>
+        <v-col cols="12">
+          <GameScoreboard />
+        </v-col>
+      </v-row>
     </v-row>
   </v-container>
 </template>

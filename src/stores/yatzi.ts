@@ -1,5 +1,7 @@
 import { HAND_PATTERNS } from "@/models/patterns";
+import type { SectionPatterns } from "@/models/patterns";
 import { Player } from "@/models/player";
+import { Section } from "@/models/scoreboard";
 import { defineStore } from "pinia";
 import { ref } from "vue";
 
@@ -10,6 +12,7 @@ export const useGameStore = defineStore("yatzi", {
             players: ref<Player[]>([]),
             round: ref<number>(0),
             turn: ref<number>(0),
+            sections: ref<Array<SectionPatterns>>([]),
         };
     },
 
@@ -19,10 +22,11 @@ export const useGameStore = defineStore("yatzi", {
       },
       totalNumberOfRounds: (state) => {
           return (): number => {
-              return HAND_PATTERNS.upper.length
-                  + HAND_PATTERNS.lower.length
-                  + HAND_PATTERNS.special.length
-                  + HAND_PATTERNS.evil.length;
+              let patternsCount: number = 0;
+              state.sections.forEach((section: SectionPatterns) => {
+                  patternsCount += HAND_PATTERNS[section].length;
+              });
+              return patternsCount;
           }
       },
       numberOfPlayers: (state): number => {
@@ -34,8 +38,9 @@ export const useGameStore = defineStore("yatzi", {
         addPlayer(name: string) {
             this.players.push(new Player(name, this.players.length));
         },
-        startGame() {
+        startGame(sections: SectionPatterns[]) {
             this.round = 1;
+            this.sections = sections;
         },
         passTheDice() {
             this.turn += 1;

@@ -1,6 +1,13 @@
 import type { DiceHand } from "../models/hand";
-import type { EvilPatterns, LowerPatterns, Patterns, SpecialPatterns, UpperPatterns } from "../models/patterns";
-import { HAND_PATTERNS, PatternGuard } from "../models/patterns";
+import type {
+    EvilPatterns,
+    LowerPatterns,
+    Patterns,
+    SectionPatterns,
+    SpecialPatterns,
+    UpperPatterns
+} from "../models/patterns";
+import { HAND_PATTERNS, PatternGuard, SECTION_PATTERN } from "../models/patterns";
 import type { Play } from "../models/plays";
 import {
     AllEven,
@@ -37,38 +44,41 @@ import {
 
 
 export class ScoreCard {
-    upperSection: Section = new UpperSection();
-    lowerSection: Section = new LowerSection();
-    specialSection: Section = new SpecialSection();
-    evilSection: Section = new EvilSection();
+    upper: Section = new UpperSection();
+    lower: Section = new LowerSection();
+    special: Section = new SpecialSection();
+    evil: Section = new EvilSection();
 
     getPlay(pattern: Patterns): Play {
         if (PatternGuard.isUpperPattern(pattern)) {
-            return (<UpperSection>this.upperSection)[<UpperPatterns>pattern];
+            return (<UpperSection>this.upper)[<UpperPatterns>pattern];
         }
         else if (PatternGuard.isLowerPattern(pattern)) {
-            return (<LowerSection>this.lowerSection)[<LowerPatterns>pattern];
+            return (<LowerSection>this.lower)[<LowerPatterns>pattern];
         }
         else if (PatternGuard.isSpecialPattern(pattern)) {
-            return (<SpecialSection>this.specialSection)[<SpecialPatterns>pattern];
+            return (<SpecialSection>this.special)[<SpecialPatterns>pattern];
         }
         else {
-            return (<EvilSection>this.evilSection)[<EvilPatterns>pattern];
+            return (<EvilSection>this.evil)[<EvilPatterns>pattern];
         }
     }
 
-    nonZeroPlayAvailable(hand: DiceHand): boolean {
-        return this.upperSection.existsValidPlay(hand)
-            || this.lowerSection.existsValidPlay(hand)
-            || this.specialSection.existsValidPlay(hand)
-            || this.evilSection.existsValidPlay(hand);
+    nonZeroPlayAvailable(hand: DiceHand, sections: SectionPatterns[]): boolean {
+        let validPlay: boolean = false;
+        SECTION_PATTERN.forEach((pattern: SectionPatterns) => {
+            if (sections.includes(pattern)) {
+                validPlay = validPlay || this[pattern].existsValidPlay(hand);
+            }
+        });
+        return validPlay;
     }
 
     totalScore(): number {
-        return this.upperSection.totalScore()
-            + this.lowerSection.totalScore()
-            + this.specialSection.totalScore()
-            + this.evilSection.totalScore();
+        return this.upper.totalScore()
+            + this.lower.totalScore()
+            + this.special.totalScore()
+            + this.evil.totalScore();
     }
 }
 
