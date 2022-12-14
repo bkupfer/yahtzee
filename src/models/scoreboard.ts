@@ -142,7 +142,7 @@ export class LowerSection extends Section {
     }
 
     bonus(): number {
-        return 65 <= this.flatScore() ? 50 : 0;
+        return 63 <= this.flatScore() ? 50 : 0;
     }
 
     flatScore(): number {
@@ -175,7 +175,7 @@ export class SpecialSection extends Section {
 
 
     bonus(): number {
-        return 300 <= this.flatScore() ? 100 : 0;
+        return 250 <= this.flatScore() ? 50 : 0;
     }
 
     existsValidPlay(hand: DiceHand): boolean {
