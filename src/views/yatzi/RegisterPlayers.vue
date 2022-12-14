@@ -47,7 +47,7 @@ function startGame() {
       <v-col cols="6">
         <h2 class="mb-4">Register players</h2>
         <input v-model="playerNameInput" type="text" placeholder="Player name">
-        <v-btn v-on:click="addPlayer(playerNameInput)" color="primary">
+        <v-btn v-on:click="addPlayer(playerNameInput)" color="primary" class="mt-3">
           Add player
         </v-btn>
         <br>
