@@ -112,9 +112,7 @@ function disablePlayHand(player: number, pattern: Patterns, hand: DiceHand): boo
     <v-row>
       <v-col cols="6">
         <h2>Turn {{ gameStore.round }} / {{ totalNumberOfRounds }} - <span :color="playerColor(gameStore.turn)" style="font-weight: bold">{{ formatPattern(gameStore.players[gameStore.turn].id) }}</span></h2>
-        <span v-if="randomInputs">Random</span>
-        <span v-else>Manual</span>
-        play:
+        {{ randomInputs ? "Random" : "Manual" }} play:
         <input type="checkbox" id="checkbox" v-model="randomInputs" />
         <div v-if="randomInputs">
           <v-btn v-on:click="randomizeHand()" color="secondary" class="mr-1">Generate hand</v-btn>
