@@ -1,6 +1,5 @@
 import type { DiceHand } from "../models/hand";
 
-
 export interface Play {
   played: boolean; // open - played/discarded
   points: number;
@@ -293,6 +292,7 @@ export class FakeYahtzee extends AbsPlay {
         return 0;
     }
 }
+
 export class OceanBlue extends AbsPlay {
     score(hand: DiceHand): number {
         const count = countDices(hand);
@@ -413,7 +413,7 @@ export class AllOdd extends AbsPlay {
     score(hand: DiceHand): number {
         if (hand.played()) {
             const count = countDices(hand);
-            if (count[1] === 0 && count[3] === 0 && count[5] == 0) {
+            if (count[2] === 0 && count[4] === 0 && count[6] == 0) {
                 return 10;
             }
         }
@@ -421,12 +421,11 @@ export class AllOdd extends AbsPlay {
     }
 }
 
-
 export class AllEven extends AbsPlay {
     score(hand: DiceHand): number {
         if (hand.played()) {
             const count = countDices(hand);
-            if (count[2] === 0 && count[4] === 0 && count[6] == 0) {
+            if (count[1] === 0 && count[3] === 0 && count[5] == 0) {
                 return 10;
             }
         }

@@ -7,7 +7,9 @@ export const useGameStore = defineStore("yatzi", {
 
     state: () => {
         return {
-            players: ref<Player[]>([])
+            players: ref<Player[]>([]),
+            round: ref<number>(0),
+            turn: ref<number>(0),
         };
     },
 
@@ -16,18 +18,31 @@ export const useGameStore = defineStore("yatzi", {
           return (player: number) => state.players[player].score;
       },
       totalNumberOfRounds: (state) => {
-          return () => {
+          return (): number => {
               return HAND_PATTERNS.upper.length
                   + HAND_PATTERNS.lower.length
                   + HAND_PATTERNS.special.length
                   + HAND_PATTERNS.evil.length;
           }
       },
+      numberOfPlayers: (state): number => {
+          return state.players.length;
+      }
     },
 
     actions: {
         addPlayer(name: string) {
             this.players.push(new Player(name, this.players.length));
+        },
+        startGame() {
+            this.round = 1;
+        },
+        passTheDice() {
+            this.turn += 1;
+            if (this.turn === this.numberOfPlayers) {
+                this.turn = 0;
+                this.round += 1;
+            }
         }
     }
 

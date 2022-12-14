@@ -14,6 +14,10 @@ const addPlayer = (name: string) => {
     playerNameInput.value = "";
   }
 }
+
+function startGame() {
+  gameStore.startGame();
+}
 </script>
 
 <template>
@@ -30,7 +34,7 @@ const addPlayer = (name: string) => {
         <li v-for="player in gameStore.players" v-bind:key="player.id">{{ player.id }}</li>
       </ol>
       <br>
-      <v-btn v-on:click="$emit('start-game')" color="success">
+      <v-btn @click="startGame()" color="success">
         Start game
       </v-btn>
     </div>

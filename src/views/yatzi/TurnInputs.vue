@@ -10,16 +10,6 @@ import type {Patterns} from "@/models/patterns";
 import {HAND_PATTERNS} from "@/models/patterns";
 
 
-const props = defineProps({
-  round: Number,
-  turn: {
-    type: Number,
-    required: true,
-  },
-});
-
-defineEmits(['pass-the-dice'])
-
 const gameStore = useGameStore();
 const randomInputs = ref<boolean>(true);
 const hand = ref<DiceHand>(new DiceHand([0, 0, 0, 0, 0]));
@@ -57,6 +47,7 @@ function playHand(player: number, pattern: Patterns, hand: DiceHand): void {
   setHandToZero();
   reroll.value = [];
   rerollAttempts.value = 0;
+  gameStore.passTheDice();
 }
 
 function playColor(player: number, pattern: Patterns, hand: DiceHand): string {
@@ -98,6 +89,14 @@ function disablePlayHand(player: number, pattern: Patterns, hand: DiceHand): boo
   if (play.played) {
     return true;
   }
+  if (['all_odd', 'all_even'].includes(pattern)) {
+    if (pattern === 'all_odd' && gameStore.round % 2 === 1) {
+      return true;
+    }
+    if (pattern === 'all_even' && gameStore.round % 2 === 0) {
+      return true;
+    }
+  }
   if (play.score(hand) !== 0) {
     return false;
   }
@@ -112,7 +111,7 @@ function disablePlayHand(player: number, pattern: Patterns, hand: DiceHand): boo
   <v-container>
     <v-row>
       <v-col cols="6">
-        <h2>Turn {{ round }} / {{ totalNumberOfRounds }} - <span :color="playerColor(turn)" style="font-weight: bold">{{ formatPattern(gameStore.players[turn].id) }}</span></h2>
+        <h2>Turn {{ gameStore.round }} / {{ totalNumberOfRounds }} - <span :color="playerColor(gameStore.turn)" style="font-weight: bold">{{ formatPattern(gameStore.players[gameStore.turn].id) }}</span></h2>
         <span v-if="randomInputs">Random</span>
         <span v-else>Manual</span>
         play:
@@ -164,12 +163,12 @@ function disablePlayHand(player: number, pattern: Patterns, hand: DiceHand): boo
           </v-col>
           <v-col cols="12" v-for="section in ['upper', 'lower', 'special', 'evil']" :key="section" >
             <v-btn v-for="pattern in HAND_PATTERNS[section]" :key="pattern" min-width="50px" class="ma-1 rounded-b-shaped"
-                   @click="playHand(turn, pattern, hand); $emit('pass-the-dice')"
-                   :disabled="disablePlayHand(turn, pattern, hand)"
-                   :color="playColor(turn, pattern, hand)"
+                   @click="playHand(gameStore.turn, pattern, hand);"
+                   :disabled="disablePlayHand(gameStore.turn, pattern, hand)"
+                   :color="playColor(gameStore.turn, pattern, hand)"
             >
               {{ formatPattern(pattern) }}
-              <sub v-if="notYetPlayed(turn, pattern)">{{ potentialPoints(turn, pattern, hand) }}</sub>
+              <sub v-if="notYetPlayed(gameStore.turn, pattern)">{{ potentialPoints(gameStore.turn, pattern, hand) }}</sub>
             </v-btn>
           </v-col>
         </v-row>
