@@ -7,7 +7,7 @@ import {ScoreCard} from "../models/scoreboard";
 // @ts-ignore
 import * as fs from 'fs';
 
-const fileName: string = './src/analytics/results/yahtzee_stats.csv';
+const fileName: string = './src/analytics/results/yahtzee_stats__balance_patch.csv';
 const ITERATIONS: number = 2 * 10 ** 8;
 const RETHROWS: number = 3;
 

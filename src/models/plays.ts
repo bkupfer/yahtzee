@@ -242,7 +242,7 @@ export class SmallMichi extends AbsPlay {
     score(hand: DiceHand): number {
         const count = countDices(hand);
         if (count[2] + count[3] + count[4] + count[5] === 5) {
-            return 13;
+            return 15;
         }
         return 0;
     }
