@@ -62,7 +62,7 @@ function playColor(player: number, pattern: Patterns, hand: DiceHand): string {
   if (play.score(hand) !== 0) {
     return 'default';
   }
-  if (!scoreboard.nonZeroPlayAvailable(hand)) {
+  if (!scoreboard.nonZeroPlayAvailable(hand, gameStore.sections)) {
     return 'error';
   }
   return 'default';
@@ -100,7 +100,7 @@ function disablePlayHand(player: number, pattern: Patterns, hand: DiceHand): boo
   if (play.score(hand) !== 0) {
     return false;
   }
-  if (!scoreboard.nonZeroPlayAvailable(hand)) {
+  if (!scoreboard.nonZeroPlayAvailable(hand, gameStore.sections)) {
     return false;
   }
   return true;
@@ -110,11 +110,10 @@ function disablePlayHand(player: number, pattern: Patterns, hand: DiceHand): boo
 <template>
   <v-container>
     <v-row>
+      <!-- Hand Input -->
       <v-col cols="6">
         <h2>Turn {{ gameStore.round }} / {{ totalNumberOfRounds }} - <span :color="playerColor(gameStore.turn)" style="font-weight: bold">{{ formatPattern(gameStore.players[gameStore.turn].id) }}</span></h2>
-        <span v-if="randomInputs">Random</span>
-        <span v-else>Manual</span>
-        play:
+        {{ randomInputs ? "Random" : "Manual" }} play:
         <input type="checkbox" id="checkbox" v-model="randomInputs" />
         <div v-if="randomInputs">
           <v-btn v-on:click="randomizeHand()" color="secondary" class="mr-1">Generate hand</v-btn>
@@ -139,6 +138,7 @@ function disablePlayHand(player: number, pattern: Patterns, hand: DiceHand): boo
         </v-btn-group>
       </v-col>
 
+      <!-- Score summary -->
       <v-col cols="6">
           <h2>Total Score</h2>
         <v-row>
@@ -156,12 +156,13 @@ function disablePlayHand(player: number, pattern: Patterns, hand: DiceHand): boo
         </v-row>
       </v-col>
 
+      <!-- Plays menu -->
       <v-col cols="12">
         <v-row>
           <v-col cols="12">
             <h2 style="font-weight: bold">Play options</h2>
           </v-col>
-          <v-col cols="12" v-for="section in ['upper', 'lower', 'special', 'evil']" :key="section" >
+          <v-col cols="12" v-for="section in gameStore.sections" :key="section" >
             <v-btn v-for="pattern in HAND_PATTERNS[section]" :key="pattern" min-width="50px" class="ma-1 rounded-b-shaped"
                    @click="playHand(gameStore.turn, pattern, hand);"
                    :disabled="disablePlayHand(gameStore.turn, pattern, hand)"

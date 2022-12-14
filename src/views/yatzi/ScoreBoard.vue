@@ -28,98 +28,104 @@ const gameStore = useGameStore();
           {{ player.score.totalScore() }}
         </td>
       </tr>
+      
+      <!-- sections -->
       <!-- upper section -->
       <tr v-for="pattern in HAND_PATTERNS.upper" :key="pattern">
         <th>{{ formatPattern(pattern) }}</th>
         <td v-for="player in gameStore.players" :key="player.id">
-          <span v-if="player.score.upperSection[pattern].played">
-            {{ player.score.upperSection[pattern].points }}
+          <span v-if="player.score.upper[pattern].played">
+            {{ player.score.upper[pattern].points }}
           </span>
         </td>
       </tr>
       <tr>
         <th class="section_score">Upper section score</th>
         <td v-for="player in gameStore.players" :key="player.id" class="section_score">
-          {{ player.score.upperSection.flatScore() }}
+          {{ player.score.upper.flatScore() }}
         </td>
       </tr>
       <tr>
         <th class="section_score">{{ formatPattern('Upper Bonus') }}</th>
         <td v-for="player in gameStore.players" :key="player.id" class="section_score">
-          <span v-if="player.score.upperSection.bonus()">
-            {{ player.score.upperSection.bonus() }}
+          <span v-if="player.score.upper.bonus()">
+            {{ player.score.upper.bonus() }}
           </span>
         </td>
       </tr>
+
       <!-- lower section -->
       <tr v-for="pattern in HAND_PATTERNS.lower" :key="pattern">
         <th>{{ formatPattern(pattern) }}</th>
         <td v-for="player in gameStore.players" :key="player.id">
-          <span v-if="player.score.lowerSection[pattern].played">
-            {{ player.score.lowerSection[pattern].points }}
+          <span v-if="player.score.lower[pattern].played">
+            {{ player.score.lower[pattern].points }}
           </span>
         </td>
       </tr>
       <tr>
         <th class="section_score">Lower section score</th>
         <td v-for="player in gameStore.players" :key="player.id" class="section_score">
-          {{ player.score.lowerSection.flatScore() }}
+          {{ player.score.lower.flatScore() }}
         </td>
       </tr>
       <tr>
         <th class="section_score">{{ formatPattern('Lower Bonus') }}</th>
         <td v-for="player in gameStore.players" :key="player.id" class="section_score">
-          <span v-if="player.score.lowerSection.bonus()">
-            {{ player.score.lowerSection.bonus() }}
+          <span v-if="player.score.lower.bonus()">
+            {{ player.score.lower.bonus() }}
           </span>
         </td>
       </tr>
+
       <!-- special section -->
       <tr v-for="pattern in HAND_PATTERNS.special" :key="pattern">
         <th>{{ formatPattern(pattern) }}</th>
         <td v-for="player in gameStore.players" :key="player.id">
-          <span v-if="player.score.specialSection[pattern].played">
-            {{ player.score.specialSection[pattern].points }}
+          <span v-if="player.score.special[pattern].played">
+            {{ player.score.special[pattern].points }}
           </span>
         </td>
       </tr>
       <tr>
         <th class="section_score">Special section score</th>
         <td v-for="player in gameStore.players" :key="player.id" class="section_score">
-          {{ player.score.specialSection.flatScore() }}
+          {{ player.score.special.flatScore() }}
         </td>
       </tr>
       <tr>
         <th class="section_score">{{ formatPattern('Special Bonus') }}</th>
         <td v-for="player in gameStore.players" :key="player.id" class="section_score">
-          <span v-if="player.score.specialSection.bonus()">
-            {{ player.score.specialSection.bonus() }}
+          <span v-if="player.score.special.bonus()">
+            {{ player.score.special.bonus() }}
           </span>
         </td>
       </tr>
+
       <!-- evil section -->
       <tr v-for="pattern in HAND_PATTERNS.evil" :key="pattern">
         <th>{{ formatPattern(pattern) }}</th>
         <td v-for="player in gameStore.players" :key="player.id">
-          <span v-if="player.score.evilSection[pattern].played">
-            {{ player.score.evilSection[pattern].points }}
+          <span v-if="player.score.evil[pattern].played">
+            {{ player.score.evil[pattern].points }}
           </span>
         </td>
       </tr>
       <tr>
         <th class="section_score">Evil section score</th>
         <td v-for="player in gameStore.players" :key="player.id" class="section_score">
-          {{ player.score.evilSection.flatScore() }}
+          {{ player.score.evil.flatScore() }}
         </td>
       </tr>
       <tr>
         <th class="section_score">Evil bonus</th>
         <td v-for="player in gameStore.players" :key="player.id" class="section_score">
-          <span v-if="player.score.evilSection.bonus()">
-            {{ player.score.evilSection.bonus() }}
+          <span v-if="player.score.evil.bonus()">
+            {{ player.score.evil.bonus() }}
           </span>
         </td>
       </tr>
+
       <!-- final score -->
       <tr>
         <th class="total_score">Total Score</th>
