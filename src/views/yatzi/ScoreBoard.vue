@@ -107,13 +107,13 @@ const gameStore = useGameStore();
         </td>
       </tr>
       <tr>
-        <th class="section_score">Special section score</th>
+        <th class="section_score">Evil section score</th>
         <td v-for="player in gameStore.players" :key="player.id" class="section_score">
           {{ player.score.evilSection.flatScore() }}
         </td>
       </tr>
       <tr>
-        <th class="section_score">{{ formatPattern('Special Bonus') }}</th>
+        <th class="section_score">Evil bonus</th>
         <td v-for="player in gameStore.players" :key="player.id" class="section_score">
           <span v-if="player.score.evilSection.bonus()">
             {{ player.score.evilSection.bonus() }}

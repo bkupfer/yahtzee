@@ -103,7 +103,7 @@ export class UpperSection extends Section {
     }
 
     bonus(): number {
-        return 50 <= this.flatScore() ? 50 : 0;
+        return 100 <= this.flatScore() ? 50 : 0;
     }
 
     flatScore(): number {
@@ -142,7 +142,7 @@ export class LowerSection extends Section {
     }
 
     bonus(): number {
-        return 50 <= this.flatScore() ? 50 : 0;
+        return 65 <= this.flatScore() ? 50 : 0;
     }
 
     flatScore(): number {
@@ -175,7 +175,7 @@ export class SpecialSection extends Section {
 
 
     bonus(): number {
-        return 100 <= this.flatScore() ? 50 : 0;
+        return 300 <= this.flatScore() ? 100 : 0;
     }
 
     existsValidPlay(hand: DiceHand): boolean {
@@ -218,7 +218,14 @@ export class EvilSection extends Section {
     bomb: Play = new Bomb();
 
     bonus(): number {
-        return 0;
+       let bowserBonus: number = 0;
+       bowserBonus += this.koopa.points;
+       bowserBonus += this.bowser.points;
+       bowserBonus += this.big_bowser.points;
+       if (bowserBonus <= -50) {
+           return -50;
+       }
+       return 0;
     }
 
     existsValidPlay(hand: DiceHand): boolean {
