@@ -15,7 +15,7 @@ export const HAND_PATTERNS = {
         'four_towers', 'four_stars', 'satan',
     ],
     evil: [
-        'skip', 'lowest_card', 'koopa', 'bowser', 'big_bowser', 'reaper', 'trader', 'bomb',
+        'skip', 'lowest_card', 'koopa', 'bowser', 'big_bowser', 'firebat', 'reaper', 'trader', 'bomb',
     ],
 } as const;
 

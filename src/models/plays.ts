@@ -251,7 +251,7 @@ export class PowerMichi extends AbsPlay {
     score(hand: DiceHand): number {
         const count = countDices(hand);
         if (count[1] + count[6] === 5) {
-            return 30;
+            return 32;
         }
         return 0;
     }
@@ -304,7 +304,7 @@ export class OceanBlue extends AbsPlay {
                 }
             }
             if (noHighDice) {
-                return 20 + count[1];
+                return 22 + 3 * count[1];
             }
         }
         return 0;
@@ -365,13 +365,20 @@ export class LowestCard extends AbsPlay {
 }
 
 export class Reaper extends AbsPlay {
-    punishment: number = -40;
+    punishment: number;
+    minimum_offering: number;
+
+    constructor(min_offering: number, damage: number) {
+        super();
+        this.minimum_offering = min_offering;
+        this.punishment = damage;
+    }
 
     score(hand: DiceHand): number {
         if (hand.played()) {
             const count = countDices(hand);
-            if (count[2] === 2) {
-                return 2;
+            if (this.minimum_offering <= count[2]) {
+                return this.minimum_offering;
             }
             return this.punishment;
         }
@@ -432,3 +439,4 @@ export class AllEven extends AbsPlay {
         return 0;
     }
 }
+

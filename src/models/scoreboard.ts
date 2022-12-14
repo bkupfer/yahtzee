@@ -203,7 +203,8 @@ export class EvilSection extends Section {
     bowser: Play = new Bowser(2);
     trader: Play = new Trader();
     big_bowser: Play = new Bowser(3);
-    reaper: Play = new Reaper();
+    firebat: Play = new Reaper(2, -20);
+    reaper: Play = new Reaper(3, -40);
     bomb: Play = new Bomb();
 
     bonus(): number {
