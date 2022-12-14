@@ -304,7 +304,7 @@ export class OceanBlue extends AbsPlay {
                 }
             }
             if (noHighDice) {
-                return 22 + 3 * count[1];
+                return 22 + 2 * count[1];
             }
         }
         return 0;

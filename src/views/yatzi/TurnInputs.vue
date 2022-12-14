@@ -90,10 +90,10 @@ function disablePlayHand(player: number, pattern: Patterns, hand: DiceHand): boo
     return true;
   }
   if (['all_odd', 'all_even'].includes(pattern)) {
-    if (pattern === 'all_odd' && gameStore.round % 2 === 1) {
+    if (pattern === 'all_odd' && gameStore.round % 2 === 0) {
       return true;
     }
-    if (pattern === 'all_even' && gameStore.round % 2 === 0) {
+    if (pattern === 'all_even' && gameStore.round % 2 === 1) {
       return true;
     }
   }
