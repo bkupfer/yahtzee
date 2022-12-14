@@ -408,3 +408,28 @@ export class DirtyStraight extends AbsPlay {
         return 0;
     }
 }
+
+export class AllOdd extends AbsPlay {
+    score(hand: DiceHand): number {
+        if (hand.played()) {
+            const count = countDices(hand);
+            if (count[1] === 0 && count[3] === 0 && count[5] == 0) {
+                return 10;
+            }
+        }
+        return 0;
+    }
+}
+
+
+export class AllEven extends AbsPlay {
+    score(hand: DiceHand): number {
+        if (hand.played()) {
+            const count = countDices(hand);
+            if (count[2] === 0 && count[4] === 0 && count[6] == 0) {
+                return 10;
+            }
+        }
+        return 0;
+    }
+}

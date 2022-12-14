@@ -3,6 +3,8 @@ import type { EvilPatterns, LowerPatterns, Patterns, SpecialPatterns, UpperPatte
 import { HAND_PATTERNS, PatternGuard } from "../models/patterns";
 import type { Play } from "../models/plays";
 import {
+    AllEven,
+    AllOdd,
     Bomb,
     Bowser,
     Casino,
@@ -84,9 +86,9 @@ export abstract class Section {
 export class UpperSection extends Section {
     pairs: Play = new Pair();
     two_pairs: Play = new TwoPairs();
-    three_of_a_kind: Play = new ThreeOfAKind();
+    triple: Play = new ThreeOfAKind();
     full_house: Play = new FullHouse();
-    dirty_straight: Play = new DirtyStraight();
+    dirty: Play = new DirtyStraight();
     poker: Play = new Poker();
     low_straight: Play = new LowStraight();
     high_straight: Play = new HighStraight();
@@ -108,17 +110,12 @@ export class UpperSection extends Section {
     }
 
     flatScore(): number {
-        let total_points = 0;
-        total_points += this.pairs.points;
-        total_points += this.two_pairs.points;
-        total_points += this.three_of_a_kind.points;
-        total_points += this.full_house.points;
-        total_points += this.dirty_straight.points;
-        total_points += this.poker.points;
-        total_points += this.low_straight.points;
-        total_points += this.high_straight.points;
-        total_points += this.yahtzee.points;
-        return total_points;
+        let totalPoints = 0;
+        HAND_PATTERNS.upper.forEach((pattern: UpperPatterns) => {
+            const play: Play = this[pattern];
+            totalPoints += play.points;
+        });
+        return totalPoints;
     }
 }
 
@@ -148,16 +145,12 @@ export class LowerSection extends Section {
     }
 
     flatScore(): number {
-        let total_points = 0;
-        total_points += this.aces.points;
-        total_points += this.twos.points;
-        total_points += this.threes.points;
-        total_points += this.fours.points;
-        total_points += this.fives.points;
-        total_points += this.sixes.points;
-        total_points += this.sum_choice.points;
-
-        return total_points;
+        let totalPoints = 0;
+        HAND_PATTERNS.lower.forEach((pattern: LowerPatterns) => {
+            const play: Play = this[pattern];
+            totalPoints += play.points;
+        });
+        return totalPoints;
     }
 }
 
@@ -165,6 +158,8 @@ export class SpecialSection extends Section {
     high_card: Play = new HighCard();
     small_michi: Play = new SmallMichi();
     casino: Play = new Casino();
+    all_odd: Play = new AllOdd();
+    all_even: Play = new AllEven();
     power_michi: Play = new PowerMichi();
     four_towers: Play = new FourTowers();
     triple_oil_monkey: Play = new TripleOilMonkey();
@@ -192,20 +187,12 @@ export class SpecialSection extends Section {
     }
 
     flatScore(): number {
-        let total_points = 0;
-        total_points += this.high_card.points;
-        total_points += this.casino.points;
-        total_points += this.small_michi.points;
-        total_points += this.power_michi.points;
-        total_points += this.heavenly_grace.points;
-        total_points += this.twins.points;
-        total_points += this.four_towers.points;
-        total_points += this.triple_oil_monkey.points;
-        total_points += this.ocean_blue.points;
-        total_points += this.fake_yahtzee.points;
-        total_points += this.four_stars.points;
-        total_points += this.satan.points;
-        return total_points;
+        let totalPoints = 0;
+        HAND_PATTERNS.special.forEach((pattern: SpecialPatterns) => {
+           const play: Play = this[pattern];
+           totalPoints += play.points;
+        });
+        return totalPoints;
     }
 }
 
@@ -242,15 +229,11 @@ export class EvilSection extends Section {
     }
 
     flatScore(): number {
-        let totalScore = 0;
-        totalScore += this.skip.points;
-        totalScore += this.lowest_card.points;
-        totalScore += this.koopa.points;
-        totalScore += this.bowser.points;
-        totalScore += this.big_bowser.points;
-        totalScore += this.trader.points;
-        totalScore += this.reaper.points;
-        totalScore += this.bomb.points;
-        return totalScore;
+        let totalPoints = 0;
+        HAND_PATTERNS.evil.forEach((pattern: EvilPatterns) => {
+            const play: Play = this[pattern];
+            totalPoints += play.points;
+        });
+        return totalPoints;
     }
 }

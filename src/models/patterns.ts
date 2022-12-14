@@ -3,15 +3,15 @@ export type SectionPatterns = typeof SECTION_PATTERN[number];
 
 export const HAND_PATTERNS = {
     upper: [
-        'pairs', 'two_pairs', 'three_of_a_kind', 'full_house', 'dirty_straight' , 'poker', 'low_straight',
+        'pairs', 'two_pairs', 'triple', 'dirty', 'full_house' , 'poker', 'low_straight',
         'high_straight',  'yahtzee',
     ],
     lower: [
         'aces', 'twos', 'threes', 'fours', 'fives', 'sixes', 'sum_choice',
     ],
     special: [
-        'high_card', 'small_michi', 'twins', 'casino', 'heavenly_grace', 'triple_oil_monkey',
-        'fake_yahtzee', 'ocean_blue', 'power_michi',
+        'high_card', 'small_michi', 'twins', 'casino', 'all_odd', 'all_even', 'heavenly_grace',
+        'triple_oil_monkey', 'fake_yahtzee', 'ocean_blue', 'power_michi',
         'four_towers', 'four_stars', 'satan',
     ],
     evil: [
