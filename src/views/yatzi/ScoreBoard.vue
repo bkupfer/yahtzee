@@ -32,13 +32,13 @@ const gameStore = useGameStore();
           </td>
         </tr>
         <tr>
-          <th class="section_score">Upper section score</th>
+          <th class="section_score">{{ formatPattern(section) }} section score</th>
           <td v-for="player in gameStore.players" :key="player.id" class="section_score">
             {{ player.score[section].flatScore() }}
           </td>
         </tr>
         <tr>
-          <th class="section_score">{{ formatPattern('Upper Bonus') }}</th>
+          <th class="section_score">{{ formatPattern(section) }} bonus</th>
           <td v-for="player in gameStore.players" :key="player.id" class="section_score">
             <span v-if="player.score[section].bonus()">
               {{ player.score.upper.bonus() }}
