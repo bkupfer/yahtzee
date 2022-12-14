@@ -392,3 +392,19 @@ export class Bomb extends AbsPlay {
     }
 }
 
+export class DirtyStraight extends AbsPlay {
+    score(hand: DiceHand): number {
+        for (let start = 1; start < 4; start ++) {
+            let satisfiesSequence = true;
+            for (let i = 0; i < 4; i ++) {
+                if (!hand.dices.includes(start + i)) {
+                    satisfiesSequence = false;
+                }
+            }
+            if (satisfiesSequence) {
+                return 20;
+            }
+        }
+        return 0;
+    }
+}

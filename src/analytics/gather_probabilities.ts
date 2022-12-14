@@ -8,7 +8,7 @@ import {ScoreCard} from "../models/scoreboard";
 import * as fs from 'fs';
 
 const fileName: string = './src/analytics/results/yahtzee_stats__balance_patch.csv';
-const ITERATIONS: number = 2 * 10 ** 8;
+const ITERATIONS: number = 2 * 10 ** 5;
 const RETHROWS: number = 3;
 
 class Stats {

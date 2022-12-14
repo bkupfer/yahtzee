@@ -6,7 +6,7 @@ import {
     Bomb,
     Bowser,
     Casino,
-    CountPlay,
+    CountPlay, DirtyStraight,
     FakeYahtzee,
     FourStars,
     FourTowers,
@@ -86,9 +86,10 @@ export class UpperSection extends Section {
     two_pairs: Play = new TwoPairs();
     three_of_a_kind: Play = new ThreeOfAKind();
     full_house: Play = new FullHouse();
+    dirty_straight: Play = new DirtyStraight();
+    poker: Play = new Poker();
     low_straight: Play = new LowStraight();
     high_straight: Play = new HighStraight();
-    poker: Play = new Poker();
     yahtzee: Play = new Yahtzee();
 
     existsValidPlay(hand: DiceHand): boolean {
@@ -112,9 +113,10 @@ export class UpperSection extends Section {
         total_points += this.two_pairs.points;
         total_points += this.three_of_a_kind.points;
         total_points += this.full_house.points;
+        total_points += this.dirty_straight.points;
+        total_points += this.poker.points;
         total_points += this.low_straight.points;
         total_points += this.high_straight.points;
-        total_points += this.poker.points;
         total_points += this.yahtzee.points;
         return total_points;
     }
