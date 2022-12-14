@@ -2,6 +2,7 @@
 import {useGameStore} from "@/stores/yatzi";
 import {formatPattern} from "./helpers";
 import {HAND_PATTERNS} from "@/models/patterns";
+import PlayeresScoreRow from "@/views/yatzi/PlayeresScoreRow.vue";
 
 const gameStore = useGameStore();
 </script>
@@ -19,14 +20,7 @@ const gameStore = useGameStore();
       </tr>
       </thead>
       <tbody>
-      <!-- score -->
-      <tr>
-        <th class="total_score">Total Score</th>
-        <td v-for="player in gameStore.players" :key="player.id" class="total_score">
-          {{ player.score.totalScore() }}
-        </td>
-      </tr>
-
+      <playeres-score-row />
       <!-- sections -->
       <template v-for="section in gameStore.sections" :key="section">
         <tr v-for="pattern in HAND_PATTERNS[section]" :key="pattern">
@@ -52,28 +46,17 @@ const gameStore = useGameStore();
           </td>
         </tr>
       </template>
-
-      <!-- final score -->
-      <tr>
-        <th class="total_score">Total Score</th>
-        <td v-for="player in gameStore.players" :key="player.id" class="total_score">
-          {{ player.score.totalScore() }}
-        </td>
-      </tr>
+      <playeres-score-row />
       </tbody>
     </v-table>
   </v-container>
 </template>
 
 <style scoped>
-td {
-  text-align: center;
-}
 table {
   border:none;
   border-collapse: collapse;
 }
-
 table td {
   border-left: 1px solid #FFF;
   border-right: 1px solid #FFF;
@@ -87,9 +70,8 @@ table td:last-child {
   border-right: none;
 }
 
-.total_score {
-  background-color: teal;
-  font-weight: bold;
+td {
+  text-align: center;
 }
 
 .section_score {
