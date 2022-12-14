@@ -1,21 +1,23 @@
 <script setup lang="ts">
-import { DiceHand, randomDice, randomHand } from "@/models/hand";
-import type { Patterns } from "@/models/patterns";
-import { HAND_PATTERNS } from "@/models/patterns";
-import { playerColor } from "@/models/player";
-import type { Play } from "@/models/plays";
-import type { ScoreCard } from "@/models/scoreboard";
-import { useGameStore } from "@/stores/yatzi";
-import { ref } from "vue";
-import { formatPattern } from "./helpers";
+import {DiceHand, randomDice, randomHand} from "@/models/hand";
+import {useGameStore} from "@/stores/yatzi";
+import {ref} from "vue";
 import ScoreSummary from "@/views/yatzi/TurnInputs/ScoreSummary.vue";
+import PlaysMenu from "@/views/yatzi/TurnInputs/PlaysMenu.vue";
+import {playerColor} from "@/models/player";
+import {formatPattern} from "./helpers";
 
 const gameStore = useGameStore();
-const randomInputs = ref<boolean>(true);
+
 const hand = ref<DiceHand>(new DiceHand([0, 0, 0, 0, 0]));
+const randomInputs = ref<boolean>(true);
 const reroll = ref<number[]>([]);
 const rerollAttempts = ref<number>(0);
 const totalNumberOfRounds = gameStore.totalNumberOfRounds();
+
+function setHandToZero() {
+  hand.value.dices = [0, 0, 0, 0, 0];
+}
 
 function randomizeHand() {
   reroll.value = [];
@@ -36,87 +38,24 @@ function randomizeRerolls() {
   rerollAttempts.value += 1;
 }
 
-function setHandToZero() {
-  hand.value.dices = [0, 0, 0, 0, 0];
-}
-
-function playHand(player: number, pattern: Patterns, hand: DiceHand): void {
-  const scoreboard: ScoreCard = gameStore.scoreboard(player);
-  const play: Play = scoreboard.getPlay(pattern);
-  play.play(hand);
+function passTheDice() {
   setHandToZero();
   reroll.value = [];
   rerollAttempts.value = 0;
   gameStore.passTheDice();
-}
-
-function playColor(player: number, pattern: Patterns, hand: DiceHand): string {
-  const scoreboard: ScoreCard = gameStore.scoreboard(player);
-  const play: Play = scoreboard.getPlay(pattern);
-  if (play.played) {
-    return 'success'
-  }
-  if (hand.dices.every((dice: number) => dice === 0)) {
-    return 'default';
-  }
-  if (play.score(hand) !== 0) {
-    return 'default';
-  }
-  if (!scoreboard.nonZeroPlayAvailable(hand, gameStore.sections)) {
-    return 'error';
-  }
-  return 'default';
-}
-
-function potentialPoints(player: number, pattern: Patterns, hand: DiceHand): number {
-  const scoreboard: ScoreCard = gameStore.scoreboard(player);
-  const play: Play = scoreboard.getPlay(pattern);
-  return play.score(hand);
-}
-
-function notYetPlayed(player: number, pattern: Patterns): boolean {
-  const scoreboard: ScoreCard = gameStore.scoreboard(player);
-  const play: Play = scoreboard.getPlay(pattern);
-  return !play.played;
-}
-
-function disablePlayHand(player: number, pattern: Patterns, hand: DiceHand): boolean {
-  const scoreboard: ScoreCard = gameStore.scoreboard(player);
-  const play: Play = scoreboard.getPlay(pattern);
-  if (hand.dices.every((dice: number) => dice === 0)) {
-    return true;
-  }
-  if (play.played) {
-    return true;
-  }
-  if (['all_odd', 'all_even'].includes(pattern)) {
-    if (pattern === 'all_odd' && gameStore.round % 2 === 0) {
-      return true;
-    }
-    if (pattern === 'all_even' && gameStore.round % 2 === 1) {
-      return true;
-    }
-  }
-  if (play.score(hand) !== 0) {
-    return false;
-  }
-  if (!scoreboard.nonZeroPlayAvailable(hand, gameStore.sections)) {
-    return false;
-  }
-  return true;
 }
 </script>
 
 <template>
   <v-container>
     <v-row>
-      <!-- Hand Input -->
+      <!-- Hand input -->
       <v-col cols="6">
         <h2>Turn {{ gameStore.round }} / {{ totalNumberOfRounds }} - <span :color="playerColor(gameStore.turn)" style="font-weight: bold">{{ formatPattern(gameStore.players[gameStore.turn].id) }}</span></h2>
         {{ randomInputs ? "Random" : "Manual" }} play:
         <input type="checkbox" id="checkbox" v-model="randomInputs" />
         <div v-if="randomInputs">
-          <v-btn v-on:click="randomizeHand()" color="secondary" class="mr-1">Generate hand</v-btn>
+          <v-btn v-on:click="randomizeHand()" :disabled="hand.played()" color="secondary" class="mr-1">Generate hand</v-btn>
           <v-btn :disabled="reroll.length === 0 || rerollAttempts === 2" v-on:click="randomizeRerolls()" color="secondary">
             Throw reroll ({{ rerollAttempts }}/2)
           </v-btn>
@@ -142,23 +81,8 @@ function disablePlayHand(player: number, pattern: Patterns, hand: DiceHand): boo
         <score-summary />
       </v-col>
 
-      <!-- Plays menu -->
       <v-col cols="12">
-        <v-row>
-          <v-col cols="12">
-            <h2 style="font-weight: bold">Play options</h2>
-          </v-col>
-          <v-col cols="12" v-for="section in gameStore.sections" :key="section" >
-            <v-btn v-for="pattern in HAND_PATTERNS[section]" :key="pattern" min-width="50px" class="ma-1 rounded-b-shaped"
-                   @click="playHand(gameStore.turn, pattern, hand);"
-                   :disabled="disablePlayHand(gameStore.turn, pattern, hand)"
-                   :color="playColor(gameStore.turn, pattern, hand)"
-            >
-              {{ formatPattern(pattern) }}
-              <sub v-if="notYetPlayed(gameStore.turn, pattern)">{{ potentialPoints(gameStore.turn, pattern, hand) }}</sub>
-            </v-btn>
-          </v-col>
-        </v-row>
+        <plays-menu :hand="hand" @pass_the_dice="passTheDice()"/>
       </v-col>
     </v-row>
 
