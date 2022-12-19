@@ -61,14 +61,14 @@ function disablePlayHand(player: number, pattern: Patterns, hand: DiceHand): boo
   if (play.played) {
     return true;
   }
-  if (['all_odd', 'all_even'].includes(pattern)) {
-    if (pattern === 'all_odd' && gameStore.round % 2 === 0) {
-      return true;
-    }
-    if (pattern === 'all_even' && gameStore.round % 2 === 1) {
-      return true;
-    }
-  }
+  // if (['all_odd', 'all_even'].includes(pattern)) {
+  //   if (pattern === 'all_odd' && gameStore.round % 2 === 0) {
+  //     return true;
+  //   }
+  //   if (pattern === 'all_even' && gameStore.round % 2 === 1) {
+  //     return true;
+  //   }
+  // }
   if (play.score(hand) !== 0) {
     return false;
   }
